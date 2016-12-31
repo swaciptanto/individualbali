@@ -1,0 +1,1 @@
+<?php require 'component/extra_table.php'; ?>

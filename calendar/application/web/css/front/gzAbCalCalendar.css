@@ -1,0 +1,307 @@
+@CHARSET "UTF-8";
+{calendarContainer} {
+    float: left;
+    font-family: Arial;
+    height: 100%;
+    margin: 0 0 10px;
+    width: 100%;
+    table-layout: fixed;
+    position: relative;
+}
+{calendarContainer} .gzABCalendarTable{
+    background-color: #efefef;
+    border: 0 solid #000000;
+    border-collapse: collapse;
+    float: left;
+    font-family: Arial;
+    height: 100%;
+    margin: 1px 10px 10px 0;
+    width: 100%;
+    table-layout: fixed;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellWeekDay,
+{calendarContainer} .gzABCalendarTable .gzABCalCellEmpty
+{calendarContainer} .gzABCalendarTable .gzABCalCellToday, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellReserved, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellPending, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellPast, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellDisable, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellEmpty, 
+{calendarContainer} .gzABCalendarTable .gzABCalCell,
+{calendarContainer} .gzABCalendarTable .gzABCalCellPendingNightsStart,
+{calendarContainer} .gzABCalendarTable .gzABCalCellPendingNightsEnd,
+{calendarContainer} .gzABCalendarTable .gzABCalCellReservedNightsStart,
+{calendarContainer} .gzABCalendarTable .gzABCalCellReservedNightsEnd,
+{calendarContainer} .gzABCalendarTable .gzABCalCellNightsReservedReserved,
+{calendarContainer} .gzABCalendarTable .gzABCalCellNightsReservedPending,
+{calendarContainer} .gzABCalendarTable .gzABCalCellNightsPendingReserved,
+{calendarContainer} .gzABCalendarTable .gzABCalCellNightsPendingPending{
+    height: 12.5%;
+    text-align: center;
+    vertical-align: middle;
+    width: 12.5%;
+}
+
+{calendarContainer} .gzABCalendarTable .gzABCalCell, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellToday,
+{calendarContainer} .gzABCalendarTable .gzABCalCellPendingNightsStart,
+{calendarContainer} .gzABCalendarTable .gzABCalCellPendingNightsEnd,
+{calendarContainer} .gzABCalendarTable .gzABCalCellReservedNightsStart,
+{calendarContainer} .gzABCalendarTable .gzABCalCellReservedNightsEnd { 
+    cursor: pointer;
+    background-color: {bg_available};
+    color: {color_available};
+    font-size: {font_size_available}px;
+    font-family: {font_famaly_available};
+    {font_style_available}
+}
+
+{calendarContainer} .gzABCalendarTable .gzABCalCellReserved{
+    background-color: {bg_booked};
+    color: {color_booked};
+    font-size: {font_size_booked}px;
+    font-family: {font_famaly_booked};
+    {font_style_booked}
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellReservedNightsStart, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellReservedNightsEnd {
+    color: #fff;
+    font-size: 13px;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellPending{
+    background-color: {bg_pending};
+    color: {color_pending};
+    font-size: {font_size_pending}px;
+    font-family: {font_famaly_pending};
+    {font_style_pending}
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellPendingNightsStart, 
+{calendarContainer} .gzABCalendarTable .gzABCalCellPendingNightsEnd {
+    color: #fff;
+    font-size: 13px;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellPast{
+    background-color: {bg_past_dates};
+    color: {color_past_dates};
+    font-size: {font_size_past}px;
+    font-family: {font_famaly_past};
+    {font_style_past}
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellEmpty{
+    background-color: {bg_empty};
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellDisable{
+    background-color: #e4e1e5;
+    color: #000;
+    font-size: 13px;
+}
+{calendarContainer} .gzABCalendarTable table.gzABCalCellLegend{
+    clear: left; 
+    border: none;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellLabel{
+    padding: 0 5px;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellColor{
+    width: 20px;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellColorPast{
+    background-color: {bg_past_dates};
+    color: {color_past_dates};
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellColorDisable{
+    background-color: #e4e1e5;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellLinkDate{
+    position: relative;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellPrice{
+    background-color: #ccc;
+    border: solid 1px #000;
+    color: #000;
+    display: none;
+    padding: 5px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    white-space: nowrap;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellPriceStatic{
+    color: #000;
+    white-space: nowrap;
+    margin: 5px 0 0;
+}
+{calendarContainer} .gzABCalendarTable table.gzABCalCellTablePrice tbody td{
+    cursor: default !important;
+}
+{calendarContainer} .gzABCalendarTable table.gzABCalCellTablePrice td.gzABCalCellMonth .gzABCalCellLinkMonth {
+    cursor: pointer;
+}
+{calendarContainer} .gzABCalendarTable  td.gzABCalCellArrow{
+    background-color: {bg_nav_month};
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+{calendarContainer} .gzABCalendarTable  td.gzABCalCellArrow a{
+    color: #fff;	
+    font-size: 20px;
+}
+{calendarContainer} .gzABCalendarTable  td.gzABCalCellArrow:hover{
+    background-color: {bg_nav_hover_month};
+}
+{calendarContainer} .gzABCalendarTable  td.gzABCalCellMonth{
+    font-family: {font_famaly_month};
+    background-color: {bg_month};
+    color: {color_month};	
+    font-size: {month_size_past}px; 
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 0;
+    {font_style_month}
+}
+{calendarContainer} .gzABCalendarTable td.gzABCalCellSelected{
+    background-color: {bg_selected};
+}
+{calendarContainer} .gzABCalendarTable td.gzABCalCellSelected img{
+    display: none;
+}
+{calendarContainer} .gzABCalendarTable .close{
+    color:  #b80f0f;
+    position: absolute;
+    right: -2px;
+    top: -10px;
+    font-size: 16px;
+    z-index: 10;    
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellDivInner{
+    height: 100%;
+    position: relative;
+    width: 100%;
+    display: table;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellDivImg{
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalDate{
+    margin: 0;
+    padding: 2px;
+    margin: 2px 0;
+    z-index: 2;
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+    height: 40px;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellImg{
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellWeek{
+    text-align: center;
+    color: {color_week};
+    background-color: {bg_week;}
+}
+{calendarContainer} .gzABCalendarTable td{
+    border: {border_widht}px solid {border_color};
+    background-color: {bg_week};
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellWeekDay{
+    font-style: italic;
+    font-size: 12px;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellWeekDay,
+{calendarContainer} .gzABCalendarTable .calendarEmpty{
+    padding: 0px;
+}
+{calendarContainer} .gzABCalendarTable .gzABCalCellToDay{
+    color: {color_today};
+    font-size: {font_size_today}px;
+    font-family: {font_famaly_today};
+    {font_style_today}
+}
+{calendarContainer} .gzABCalendarTable .error-tooltip{
+    display: none;
+}
+{calendarContainer} .gzABCalCellLegend{
+    float: left;
+}
+{calendarContainer} .gzABCalCellLabel{
+    width: 20%;
+}
+{calendarContainer} .gzABCalCellLabel{
+    font-family: {font_famaly_legend};
+    color: {color_legend};	
+    font-size: {font_size_legend}px; 
+    fontt-style: italic;
+}
+{calendarContainer} .gzABCalCellColor.gzABCalColorAvil{
+    background-color: {bg_available};
+}
+{calendarContainer} .gzABCalCellColor.gzABCalColorPending{
+    background-color: {bg_pending};
+}
+{calendarContainer} .gzABCalCellColor.gzABCalColorReserved{
+    background-color: {bg_booked};
+}
+{calendarContainer} .gzABCalDate::before, {calendarContainer} .gzABCalDate::before {
+    bottom: 0;
+    color: #fff;
+    cursor: default;
+    display: none;
+    font-size: 10px;
+    left: 0;
+    line-height: 1;
+    padding: 10px 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    z-index: 1;
+    font-weight: bold;
+    height: 100%;
+    width: 100%;
+}
+{calendarContainer} .gzABCalCellAvil .gzABCalDate::before,
+{calendarContainer} .gzABCalCellPendingNightsStart .gzABCalDate::before,
+{calendarContainer} .gzABCalCellPendingNightsEnd .gzABCalDate::before,
+{calendarContainer} .gzABCalCellReservedNightsStart .gzABCalDate::before,
+{calendarContainer} .gzABCalCellReservedNightsEnd .gzABCalDate::before{
+    font-size: 9x;
+    background: {bg_selected} none repeat scroll 0 0;
+    content: "{SELECTDATE}";
+    cursor: pointer;
+}
+{calendarContainer}  .gzABCalCellPending .gzABCalDate::before {
+    background: {bg_selected} none repeat scroll 0 0;
+    font-size: 9x;
+    content: "{DATEPENDING}";
+    cursor: pointer;
+}
+{calendarContainer}  .gzABCalCellReserved .gzABCalDate::before {
+    font-size: 8px;
+    background: {bg_selected} none repeat scroll 0 0;
+    content: "{DATERESERVED}";
+    cursor: pointer;
+}
+{calendarContainer}  .gzABCalCellPast .gzABCalDate::before {
+    font-size: 9x;
+    background: {bg_selected} none repeat scroll 0 0;
+    content: "{DATEPASSED}";
+    cursor: pointer;
+}
+{calendarContainer} .gzABCalDate:hover::before{
+    display: block;
+}

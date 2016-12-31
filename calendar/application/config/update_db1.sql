@@ -1,0 +1,1 @@
+ALTER TABLE `gz_abc_calendars` ADD `url` varchar(250) DEFAULT NULL;

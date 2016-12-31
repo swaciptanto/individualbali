@@ -1,0 +1,3 @@
+INSERT INTO `gz_abc_i18n_local` (`id`, `language_id`, `type`, `layout`, `value`, `field`, `key`, `arr_key`) VALUES
+(NULL, 3, 'text', 'backhand', 'Import your ics Caledanr', 'Import your ics Caledanr', 'label_ics_file', '0'),
+(NULL, 3, 'text', 'backhand', 'Import other calendars you use and we’ll automatically keep this listing’s availability up-to-date.', 'Import other calendars you use and we’ll automatically keep this listing’s availability up-to-date.', 'import_ics_info', '0');
