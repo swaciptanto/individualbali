@@ -1,7 +1,9 @@
 <?php
 
+//optional
 set_time_limit(0);
 
+//every cron must include this
 require_once 'config.php';
 
 function refreshExchangeRate()
