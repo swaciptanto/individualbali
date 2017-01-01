@@ -53,10 +53,8 @@ function refreshExchangeRate()
         $fc .= '$exchange_rate = array();' . "\n";
         $fc .= '$exchange_rate["USDUSD"] = 1;' . "\n";
         foreach($result as $ckey => $cval) {
-            $fc .= '$exchange_rate[' . "'$ckey'" . '] = ' . "'$cval';\n";
+            $fc .= '$exchange_rate[' . "'$ckey'" . '] = ' . (float)$cval . ";\n";
         }
-        $fc .= '?>';
-
         $exchange_rate_filename = CONFIG_PATH . 'exchange.rate.php';
         if (!file_exists($exchange_rate_filename)) {
             $handle = fopen($exchange_rate_filename, 'w');
