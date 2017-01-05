@@ -15,7 +15,7 @@ class GzAdmin extends App {
 
         date_default_timezone_set($this->tpl['option_arr_values']['timezone']);
 
-        $this->tpl['js_format'] = Util::getJsDateFormta($this->tpl['option_arr_values']['date_format']);
+        $this->tpl['js_format'] = Util::getJsDateFormat($this->tpl['option_arr_values']['date_format']);
 
         if (!$this->isLoged() && @$_REQUEST['action'] != 'login') {
 

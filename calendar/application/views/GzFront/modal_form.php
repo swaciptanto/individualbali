@@ -33,7 +33,7 @@
                         <div id="modal-total-with-tax" class="price center"></div>
                     </div>
                     <?php
-                    $date_fomrat = Util::getJsDateFormta($tpl['option_arr_values']['date_format']);
+                    $date_fomrat = Util::getJsDateFormat($tpl['option_arr_values']['date_format']);
                     ?>
                     <div class="form-group input-group groupdate">
                         <input data-format="<?php echo $date_fomrat; ?>" id="modal-startdate" class="start-date-calendar required input-sm form-control" required="required" placeholder="start date" name="startdate" value="" size="60" maxlength="128" type="text">

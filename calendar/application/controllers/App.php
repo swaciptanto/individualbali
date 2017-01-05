@@ -88,7 +88,7 @@ class App extends Controller {
         return $this->getRoleId() == 2;
     }
 
-    function calclateBookingPrice($params) {
+    function calculateBookingPrice($params) {
         //modified: add new model
         Object::loadFiles('Model', array('Price', 'Calendar', 'Extra', 'Option', 'Discount', 'DrupalRateTax'));
         $PriceModel = new PriceModel();
@@ -108,13 +108,13 @@ class App extends Controller {
             'tax' => 0,
             'security' => 0,
             'deposit' => 0,
-            'formated_calendars_price' => Util::currenctFormat($option_arr['currency'], 0),
-            'formated_extra_price' => Util::currenctFormat($option_arr['currency'], 0),
-            'formated_discount' => Util::currenctFormat($option_arr['currency'], 0),
-            'formated_total' => Util::currenctFormat($option_arr['currency'], 0),
-            'formated_tax' => Util::currenctFormat($option_arr['currency'], 0),
-            'formated_security' => Util::currenctFormat($option_arr['currency'], 0),
-            'formated_deposit' => Util::currenctFormat($option_arr['currency'], 0)
+            'formated_calendars_price' => Util::currencyFormat($option_arr['currency'], 0),
+            'formated_extra_price' => Util::currencyFormat($option_arr['currency'], 0),
+            'formated_discount' => Util::currencyFormat($option_arr['currency'], 0),
+            'formated_total' => Util::currencyFormat($option_arr['currency'], 0),
+            'formated_tax' => Util::currencyFormat($option_arr['currency'], 0),
+            'formated_security' => Util::currencyFormat($option_arr['currency'], 0),
+            'formated_deposit' => Util::currencyFormat($option_arr['currency'], 0)
             );
 
         if (empty($params['calendar_id']) || empty($params['to_date']) || empty($params['from_date'])) {
@@ -321,13 +321,13 @@ class App extends Controller {
                         break;
                 }
             }
-            $result['formated_discount'] = Util::currenctFormat($option_arr['currency'], $result['discount']);
-            $result['formated_extra_price'] = Util::currenctFormat($option_arr['currency'], $result['extra_price']);
-            $result['formated_deposit'] = Util::currenctFormat($option_arr['currency'], $result['deposit']);
-            $result['formated_total'] = Util::currenctFormat($option_arr['currency'], $result['total']);
-            $result['formated_total_with_tax'] = Util::currenctFormat($option_arr['currency'], $result['total_with_tax']);
-            $result['formated_calendars_price'] = Util::currenctFormat($option_arr['currency'], $result['calendars_price']);
-            $result['formated_tax'] = Util::currenctFormat($option_arr['currency'], $result['tax']);
+            $result['formated_discount'] = Util::currencyFormat($option_arr['currency'], $result['discount']);
+            $result['formated_extra_price'] = Util::currencyFormat($option_arr['currency'], $result['extra_price']);
+            $result['formated_deposit'] = Util::currencyFormat($option_arr['currency'], $result['deposit']);
+            $result['formated_total'] = Util::currencyFormat($option_arr['currency'], $result['total']);
+            $result['formated_total_with_tax'] = Util::currencyFormat($option_arr['currency'], $result['total_with_tax']);
+            $result['formated_calendars_price'] = Util::currencyFormat($option_arr['currency'], $result['calendars_price']);
+            $result['formated_tax'] = Util::currencyFormat($option_arr['currency'], $result['tax']);
         }
         return $result;
     }
@@ -720,9 +720,8 @@ class App extends Controller {
         $_POST['to_date'] = Util::dateToTimestamp($this->tpl['option_arr_values']['date_format'], $_POST['finishdate']);
         $_POST['calendar_id'] = $_GET['cid'];
         
-        $price = $this->calclateBookingPrice($_POST);
-
-        $replacement['total'] = $price['formated_total'];
+        $price = $this->calculateBookingPrice($_POST);
+        $replacement['total'] = $price['formated_total_with_tax'];
 
         switch ($group) {
             case 'client':
@@ -750,9 +749,10 @@ class App extends Controller {
                 $to = $email_reservation_data['field_email_reservasi_value'];
                 break;
         }
-        $option_arr['notify_email'] = 'admin@individualbali.com';
+        
+        $admin_email = 'info@individualbali.com';
+        $option_arr['notify_email'] = $admin_email;
         require_once APP_PATH . '/helpers/PHPMailer_5.2.4/class.phpmailer.php';
-
         try {
             //*/
             $mail = new PHPMailer(true); //New instance, with exceptions enabled

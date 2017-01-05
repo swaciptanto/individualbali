@@ -37,28 +37,28 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                                     <div class="form-group">
                                         <label class="control-label" for="calendars_price"><?php echo __('calendars_price'); ?>:</label>
                                         <div class="input-group">
-                                            <span class="input-group-addon"><?php echo Util::getCurrensySimbol($tpl['option_arr_values']['currency']); ?></span>
+                                            <span class="input-group-addon"><?php echo Util::getCurrencySimbol($tpl['option_arr_values']['currency']); ?></span>
                                             <input data-rule-required="true" id="calendars_price" class="form-control input-sm" type="text" name="calendars_price" size="25" value="" title="<?php echo __('calendars_price'); ?>" placeholder="">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="extra_price"><?php echo __('extra_price'); ?>:</label>
                                         <div class="input-group">
-                                            <span class="input-group-addon"><?php echo Util::getCurrensySimbol($tpl['option_arr_values']['currency']); ?></span>
+                                            <span class="input-group-addon"><?php echo Util::getCurrencySimbol($tpl['option_arr_values']['currency']); ?></span>
                                             <input data-rule-required="true" id="extra_price" class="form-control input-sm" type="text" name="extra_price" size="25" value="" title="<?php echo __('extra_price'); ?>" placeholder="<?php echo __('extra_price'); ?>">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="tax"><?php echo __('tax'); ?>:</label>
                                         <div class="input-group">
-                                            <span class="input-group-addon"><?php echo Util::getCurrensySimbol($tpl['option_arr_values']['currency']); ?></span>
+                                            <span class="input-group-addon"><?php echo Util::getCurrencySimbol($tpl['option_arr_values']['currency']); ?></span>
                                             <input data-rule-required="true" id="tax" class="form-control input-sm" type="text" name="tax" size="25" value="" title="tax" placeholder="">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="deposit"><?php echo __('deposit'); ?>:</label>
                                         <div class="input-group">
-                                            <span class="input-group-addon"><?php echo Util::getCurrensySimbol($tpl['option_arr_values']['currency']); ?></span>
+                                            <span class="input-group-addon"><?php echo Util::getCurrencySimbol($tpl['option_arr_values']['currency']); ?></span>
                                             <input data-rule-required="true" id="deposit" class="form-control input-sm" type="text" name="deposit" size="25" value="" title="deposit" placeholder="">
                                         </div>
                                     </div>
@@ -69,14 +69,14 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                                     <div class="form-group">
                                         <label class="control-label" for="discount"><?php echo __('discount'); ?>:</label>
                                         <div class="input-group">
-                                            <span class="input-group-addon"><?php echo Util::getCurrensySimbol($tpl['option_arr_values']['currency']); ?></span>
+                                            <span class="input-group-addon"><?php echo Util::getCurrencySimbol($tpl['option_arr_values']['currency']); ?></span>
                                             <input data-rule-required="true" id="discount" class="form-control input-sm" type="text" name="discount" size="25" value="" title="discount" placeholder="">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="total"><?php echo __('total'); ?>:</label>
                                         <div class="input-group">
-                                            <span class="input-group-addon"><?php echo Util::getCurrensySimbol($tpl['option_arr_values']['currency']); ?></span>
+                                            <span class="input-group-addon"><?php echo Util::getCurrencySimbol($tpl['option_arr_values']['currency']); ?></span>
                                             <input data-rule-required="true" id="total" class="form-control input-sm" type="text" name="total" size="25" value="" title="total" placeholder="">
                                         </div>
                                     </div>

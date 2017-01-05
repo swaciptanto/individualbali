@@ -37,11 +37,11 @@ class ABCalendar extends App {
         $this->calendar_arr = $CalendarModel->getI18n($cid);
         $this->calendar_capacity = $this->calendar_arr['limit'];
         $this->startDay = $option_arr_values['week_first_day'];
-        $this->serReservationsInfo($m, $day, $y);
-        $this->serPricesArr($m, $day, $y);
+        $this->setReservationsInfo($m, $day, $y);
+        $this->setPricesArr($m, $day, $y);
     }
 
-    function serPricesArr($m, $day, $y) {
+    function setPricesArr($m, $day, $y) {
         Object::loadFiles('Model', array('Price'));
         $PriceModel = new PriceModel();
         $now = mktime(0, 0, 0, $m, 0, $y);
@@ -60,25 +60,25 @@ class ABCalendar extends App {
                 if (($i<=$v['to_date'] && $i>=$v['from_date']) && ($i >= $from && $i <= $to)) {
                     switch (date('N', $i)) {
                         case 1:
-                            $this->prices[$i]['price'] = Util::currenctFormat($this->option_arr['currency'], $v['monday']);
+                            $this->prices[$i]['price'] = Util::currencyFormat($this->option_arr['currency'], $v['monday']);
                             break;
                         case 2:
-                            $this->prices[$i]['price'] = Util::currenctFormat($this->option_arr['currency'], $v['tuesday']);
+                            $this->prices[$i]['price'] = Util::currencyFormat($this->option_arr['currency'], $v['tuesday']);
                             break;
                         case 3:
-                            $this->prices[$i]['price'] = Util::currenctFormat($this->option_arr['currency'], $v['wednesday']);
+                            $this->prices[$i]['price'] = Util::currencyFormat($this->option_arr['currency'], $v['wednesday']);
                             break;
                         case 4:
-                            $this->prices[$i]['price'] = Util::currenctFormat($this->option_arr['currency'], $v['thursday']);
+                            $this->prices[$i]['price'] = Util::currencyFormat($this->option_arr['currency'], $v['thursday']);
                             break;
                         case 5:
-                            $this->prices[$i]['price'] = Util::currenctFormat($this->option_arr['currency'], $v['friday']);
+                            $this->prices[$i]['price'] = Util::currencyFormat($this->option_arr['currency'], $v['friday']);
                             break;
                         case 6:
-                            $this->prices[$i]['price'] = Util::currenctFormat($this->option_arr['currency'], $v['saturday']);
+                            $this->prices[$i]['price'] = Util::currencyFormat($this->option_arr['currency'], $v['saturday']);
                             break;
                         case 7:
-                            $this->prices[$i]['price'] = Util::currenctFormat($this->option_arr['currency'], $v['sunday']);
+                            $this->prices[$i]['price'] = Util::currencyFormat($this->option_arr['currency'], $v['sunday']);
                             break;
                     }
                 }
@@ -86,7 +86,7 @@ class ABCalendar extends App {
         }
     }
 
-    function serReservationsInfo($m, $day, $y) {
+    function setReservationsInfo($m, $day, $y) {
         Object::loadFiles('Model', array('Booking'));
         $BookingModel = new BookingModel();
 

@@ -97,7 +97,7 @@ class ICal {
         curl_setopt($curl_handle, CURLOPT_URL, $url);
         curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Your application name');
+        curl_setopt($curl_handle, CURLOPT_USERAGENT, 'IBH Calendar');
         $contents = curl_exec($curl_handle);
         curl_close($curl_handle);
         
@@ -291,7 +291,7 @@ class ICal {
      *
      * @return {int}
      */
-    public function iCalDateToUnixTimestamp($icalDate) {
+    public function iCalDateToUnixTimestamp($icalDate, $use_midnight_time = false) {
         $icalDate = str_replace('T', '', $icalDate);
         $icalDate = str_replace('Z', '', $icalDate);
         $pattern = '/([0-9]{4})';   // 1: YYYY
@@ -307,6 +307,11 @@ class ICal {
         }
         // Unix timestamps after 03:14:07 UTC 2038-01-19 might cause an overflow
         // if 32 bit integers are used.
+        if ($use_midnight_time) {
+            $date[4] = 0;
+            $date[5] = 0;
+            $date[6] = 0;
+        }
         $timestamp = mktime((int) $date[4], (int) $date[5], (int) $date[6], (int) $date[2], (int) $date[3], (int) $date[1]);
         return $timestamp;
     }

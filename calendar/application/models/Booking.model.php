@@ -82,7 +82,7 @@ class BookingModel extends AppModel {
 
         foreach ($booked_extras as $extra) {
             $arr['booked_extras'][$extra['extra_id']] = $extra;
-            $arr['extras'][] = $extra['title'] . ' - ' . Util::currenctFormat($option_arr['currency'], $extra['price']);
+            $arr['extras'][] = $extra['title'] . ' - ' . Util::currencyFormat($option_arr['currency'], $extra['price']);
         }
         
         $arr['date_from'] = date($option_arr['date_format'], $arr['date_from']);

@@ -38,7 +38,7 @@
                         <?php echo date($tpl['option_arr_values']['date_format'], $tpl['arr'][$i]['date_to']); ?>
                     </td>
                     <td><?php echo $tpl['arr'][$i]['first_name'] . ' ' . $tpl['arr'][$i]['second_name']; ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $tpl['arr'][$i]['total']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $tpl['arr'][$i]['total']); ?></td>
                     <td>
                         <span class="label label-<?php echo $tpl['arr'][$i]['status']; ?>">
                             <?php echo $status_arr[$tpl['arr'][$i]['status']]; ?>

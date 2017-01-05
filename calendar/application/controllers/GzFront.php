@@ -352,7 +352,7 @@ class GzFront extends App {
         $params['from_date'] = $_POST['start_date'];
         $params['to_date'] = $_POST['end_date'];
 
-        $this->tpl['prices'] = $this->calclateBookingPrice(array_merge($params, $_POST));
+        $this->tpl['prices'] = $this->calculateBookingPrice(array_merge($params, $_POST));
 
         $nights = ($params['to_date'] - $params['from_date']) / 86400;
 
@@ -416,7 +416,7 @@ class GzFront extends App {
             $params['from_date'] = $data['date_from'];
             $params['to_date'] = $data['date_to'];
 
-            $prices = $this->calclateBookingPrice(array_merge($params, $_POST));
+            $prices = $this->calculateBookingPrice(array_merge($params, $_POST));
 
             $data['calendars_price'] = $prices['calendars_price'];
             $data['amount'] = ($prices['deposit'] > 0) ? $prices['deposit'] : $prices['total'];
@@ -475,7 +475,7 @@ class GzFront extends App {
                     $service = new Google_Service_Calendar($client);
 
                     $event = new Google_Service_Calendar_Event(array(
-                        'summary' => $_POST['email'] . ' ' . __('amount') . ' ' . Util::currenctFormat($option_arr_values['currency'], $data['amount']),
+                        'summary' => $_POST['email'] . ' ' . __('amount') . ' ' . Util::currencyFormat($option_arr_values['currency'], $data['amount']),
                         'location' => $_POST['address_1'],
                         'description' => __('client_name') . ': ' . $_POST['email'] . ', ' . __('address') . $_POST['address_1'],
                         'start' => array(
@@ -763,7 +763,7 @@ class GzFront extends App {
         }
         
         $_POST['calendar_id'] = $_GET['cid'];
-        $price = $this->calclateBookingPrice($_POST);
+        $price = $this->calculateBookingPrice($_POST);
         
         $nights = ceil(($_POST['to_date'] - $_POST['from_date']) / 86400);
         $price['formated_total'] = $price['formated_total'] . ' / ' . $nights . ' nights';
@@ -776,7 +776,7 @@ class GzFront extends App {
     function calculatePrice() {
         $this->isAjax = true;
 
-        $price = $this->calclateBookingPrice($_POST);
+        $price = $this->calculateBookingPrice($_POST);
 
         header("Content-Type: application/json", true);
         echo json_encode($price);
@@ -872,7 +872,7 @@ class GzFront extends App {
         $_POST['from_date'] = $_POST['start_date'];
         $_POST['to_date'] = $_POST['end_date'];
 
-        $this->tpl['prices'] = $this->calclateBookingPrice($_POST);
+        $this->tpl['prices'] = $this->calculateBookingPrice($_POST);
     }
 
     function GzABCCss() {

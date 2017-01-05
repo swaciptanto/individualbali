@@ -98,12 +98,12 @@ class InvoiceModel extends AppModel {
         }
         $payment_method_arr = __('payment_method_arr');
         $replacement['payment_method'] = $payment_method_arr[$invoice['payment_method']];
-        $replacement['deposit'] = Util::currenctFormat($option_arr['currency'], $invoice['deposit']);
-        $replacement['tax'] = Util::currenctFormat($option_arr['currency'], $invoice['tax']);
-        $replacement['total'] = Util::currenctFormat($option_arr['currency'], $invoice['total']);
-        $replacement['calendar_price'] = Util::currenctFormat($option_arr['currency'], $invoice['calendar_price']);
-        $replacement['extra_price'] = Util::currenctFormat($option_arr['currency'], $invoice['extra_price']);
-        $replacement['discount'] = Util::currenctFormat($option_arr['currency'], $invoice['discount']);
+        $replacement['deposit'] = Util::currencyFormat($option_arr['currency'], $invoice['deposit']);
+        $replacement['tax'] = Util::currencyFormat($option_arr['currency'], $invoice['tax']);
+        $replacement['total'] = Util::currencyFormat($option_arr['currency'], $invoice['total']);
+        $replacement['calendar_price'] = Util::currencyFormat($option_arr['currency'], $invoice['calendar_price']);
+        $replacement['extra_price'] = Util::currencyFormat($option_arr['currency'], $invoice['extra_price']);
+        $replacement['discount'] = Util::currencyFormat($option_arr['currency'], $invoice['discount']);
         $replacement['invoice_number'] = $invoice['invoice_number'];
         $replacement['invoice_company'] = $invoice['invoice_company'];
         $replacement['invoice_name'] = $invoice['invoice_name'];

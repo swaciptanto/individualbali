@@ -14,8 +14,8 @@ class GzDiscount extends App {
         $this->tpl['option_arr'] = $OptionModel->getAllPairs();
         $this->tpl['option_arr_values'] = $this->option_arr;
 
-        $this->tpl['js_format'] = Util::getJsDateFormta($this->tpl['option_arr_values']['date_format']);
-        $this->tpl['iso_format'] = Util::getISODateFormta($this->tpl['option_arr_values']['date_format']);
+        $this->tpl['js_format'] = Util::getJsDateFormat($this->tpl['option_arr_values']['date_format']);
+        $this->tpl['iso_format'] = Util::getISODateFormat($this->tpl['option_arr_values']['date_format']);
 
         date_default_timezone_set($this->tpl['option_arr_values']['timezone']);
 

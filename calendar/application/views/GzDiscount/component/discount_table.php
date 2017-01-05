@@ -23,7 +23,7 @@
                     <td><?php echo date($tpl['option_arr_values']['date_format'], $v['from_date']); ?></td>
                     <td><?php echo date($tpl['option_arr_values']['date_format'], $v['to_date']); ?></td>
                     <td><?php echo $v['promo_code']; ?></td>
-                    <td><?php echo ($v['type'] == 'price') ? Util::currenctFormat($tpl['option_arr_values']['currency'], $v['discount']) : $v['discount'] . ' %'; ?></td>
+                    <td><?php echo ($v['type'] == 'price') ? Util::currencyFormat($tpl['option_arr_values']['currency'], $v['discount']) : $v['discount'] . ' %'; ?></td>
                     <td><?php echo $v['type']; ?></td>
                     <td><a class="btn btn-success btn-sm icon-edit" href="<?php echo INSTALL_URL; ?>GzDiscount/edit/<?php echo $v['id']; ?>" rev="<?php echo $v['id']; ?>" rel="<?php echo $v['room_type_id']; ?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
                     <td><a class="btn btn-danger btn-sm icon-delete" rev="<?php echo $v['id']; ?>" href="<?php echo INSTALL_URL; ?>?GzDiscount/delete/<?php echo $v['id']; ?>" rel="<?php echo $v['room_type_id']; ?>"><span class="glyphicon glyphicon-remove"></span></a></td>

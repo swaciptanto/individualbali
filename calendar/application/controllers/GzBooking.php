@@ -14,8 +14,8 @@ class GzBooking extends App {
         $this->tpl['option_arr'] = $OptionModel->getAllPairs();
         $this->tpl['option_arr_values'] = $this->option_arr;
 
-        $this->tpl['js_format'] = Util::getJsDateFormta($this->tpl['option_arr_values']['date_format']);
-        $this->tpl['iso_format'] = Util::getISODateFormta($this->tpl['option_arr_values']['date_format']);
+        $this->tpl['js_format'] = Util::getJsDateFormat($this->tpl['option_arr_values']['date_format']);
+        $this->tpl['iso_format'] = Util::getISODateFormat($this->tpl['option_arr_values']['date_format']);
 
         date_default_timezone_set($this->tpl['option_arr_values']['timezone']);
 
@@ -587,7 +587,7 @@ class GzBooking extends App {
                 $params['to_date'] = Util::dateToTimestamp($this->tpl['option_arr_values']['date_format'], $date['1']);
 
 
-                $price = $this->calclateBookingPrice(array_merge($params, $post));
+                $price = $this->calculateBookingPrice(array_merge($params, $post));
             }
         }
         header("Content-Type: application/json", true);

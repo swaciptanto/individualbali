@@ -34,13 +34,13 @@
                     <td><?php echo $v['title']; ?></td>
                     <td><?php echo date($tpl['option_arr_values']['date_format'], $v['from_date']); ?></td>
                     <td><?php echo date($tpl['option_arr_values']['date_format'], $v['to_date']); ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $v['monday']); ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $v['tuesday']); ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $v['wednesday']); ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $v['thursday']); ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $v['friday']); ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $v['saturday']); ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $v['sunday']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $v['monday']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $v['tuesday']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $v['wednesday']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $v['thursday']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $v['friday']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $v['saturday']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $v['sunday']); ?></td>
                     <?php /*
                       <td><?php echo $v['adults']; ?></td>
                       <td><?php echo $v['children']; ?></td>

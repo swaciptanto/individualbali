@@ -13,27 +13,28 @@ class Util {
      * @static
      */
     public static $currencies = array(
-        'AUD' => array('name' => "Australian Dollar", 'symbol' => "A$", 'ASCII' => "A&#36;"),
-        'CAD' => array('name' => "Canadian Dollar", 'symbol' => "$", 'ASCII' => "&#36;"),
-        'CZK' => array('name' => "Czech Koruna", 'symbol' => "K�?", 'ASCII' => ""),
-        'DKK' => array('name' => "Danish Krone", 'symbol' => "Kr", 'ASCII' => ""),
+        'USD' => array('name' => "U.S. Dollar", 'symbol' => "$", 'ASCII' => "&#36;"),
         'EUR' => array('name' => "Euro", 'symbol' => "€", 'ASCII' => "&#128;"),
+        'GBP' => array('name' => "Pound Sterling", 'symbol' => "£", 'ASCII' => "&#163;"),
+        'IDR' => array('name' => "Indonesian Rupiah", 'symbol' => "IDR", 'ASCII' => ""),
+        'AUD' => array('name' => "Australian Dollar", 'symbol' => "A$", 'ASCII' => "A&#36;"),
+        'SGD' => array('name' => "Singapore Dollar", 'symbol' => "$", 'ASCII' => "&#36;"),
         'HKD' => array('name' => "Hong Kong Dollar", 'symbol' => "$", 'ASCII' => "&#36;"),
+        'CAD' => array('name' => "Canadian Dollar", 'symbol' => "$", 'ASCII' => "&#36;"),
+        'CHF' => array('name' => "Swiss Franc", 'symbol' => "CHF", 'ASCII' => ""),
+        'CZK' => array('name' => "Czech Koruna", 'symbol' => "Kč", 'ASCII' => ""),
+        'DKK' => array('name' => "Danish Krone", 'symbol' => "Kr", 'ASCII' => ""),
         'HUF' => array('name' => "Hungarian Forint", 'symbol' => "Ft", 'ASCII' => ""),
-        'IDR' => array('name' => "Indonesian Rupiah", 'symbol' => "IDR", 'ASCII' => ""),'ILS' => array('name' => "Israeli New Sheqel", 'symbol' => "₪", 'ASCII' => "&#8361;"),
+        'ILS' => array('name' => "Israeli New Sheqel", 'symbol' => "₪", 'ASCII' => "&#8361;"),
         'JPY' => array('name' => "Japanese Yen", 'symbol' => "¥", 'ASCII' => "&#165;"),
         'MXN' => array('name' => "Mexican Peso", 'symbol' => "$", 'ASCII' => "&#36;"),
         'NOK' => array('name' => "Norwegian Krone", 'symbol' => "Kr", 'ASCII' => ""),
         'NZD' => array('name' => "New Zealand Dollar", 'symbol' => "$", 'ASCII' => "&#36;"),
         'PHP' => array('name' => "Philippine Peso", 'symbol' => "₱", 'ASCII' => ""),
         'PLN' => array('name' => "Polish Zloty", 'symbol' => "zł", 'ASCII' => ""),
-        'GBP' => array('name' => "Pound Sterling", 'symbol' => "£", 'ASCII' => "&#163;"),
-        'SGD' => array('name' => "Singapore Dollar", 'symbol' => "$", 'ASCII' => "&#36;"),
         'SEK' => array('name' => "Swedish Krona", 'symbol' => "kr", 'ASCII' => ""),
-        'CHF' => array('name' => "Swiss Franc", 'symbol' => "CHF", 'ASCII' => ""),
-        'TWD' => array('name' => "Taiwan New Dollar", 'symbol' => "NT$", 'ASCII' => "NT&#36;"),
         'THB' => array('name' => "Thai Baht", 'symbol' => "฿", 'ASCII' => "&#3647;"),
-        'USD' => array('name' => "U.S. Dollar", 'symbol' => "$", 'ASCII' => "&#36;")
+        'TWD' => array('name' => "Taiwan New Dollar", 'symbol' => "NT$", 'ASCII' => "NT&#36;"),
     );
     public static $owner_tokens = array(
         'name' => '{Name}',
@@ -275,7 +276,7 @@ class Util {
         return $arr2;
     }
 
-    public static function getJsDateFormta($php_format) {
+    public static function getJsDateFormat($php_format) {
 
         $dateFormats['Y-m-d'] = array('js' => 'yy-mm-dd', 'php' => 'Y-m-d', 'separator' => '-', 'iso' => 'YYYY-MM-DD');
         $dateFormats['Y/m/d'] = array('js' => 'yy/mm/dd', 'php' => 'Y/m/d', 'separator' => '/', 'iso' => 'YYYY/MM/DD');
@@ -295,7 +296,7 @@ class Util {
         return $dateFormats['d.m.Y']['js'];
     }
 
-    public static function getISODateFormta($php_format) {
+    public static function getISODateFormat($php_format) {
 
         $dateFormats['Y-m-d'] = array('js' => 'yy-mm-dd', 'php' => 'Y-m-d', 'separator' => '-', 'iso' => 'YYYY-MM-DD');
         $dateFormats['Y/m/d'] = array('js' => 'yy/mm/dd', 'php' => 'Y/m/d', 'separator' => '/', 'iso' => 'YYYY/MM/DD');
@@ -358,11 +359,10 @@ class Util {
                     break;
             }
         }
-
-        return mktime(0, 0, 0, $aDataRet['month'], $aDataRet['day'], $aDataRet['year']);
+        return mktime(0, 0, 0, (int)$aDataRet['month'], (int)$aDataRet['day'], (int)$aDataRet['year']);
     }
 
-    public static function getCurrensySimbol($code) {
+    public static function getCurrencySimbol($code) {
         if (!empty($code) && array_key_exists($code, self::$currencies)) {
             return self::$currencies[$code]['symbol'];
         } else {
@@ -370,7 +370,7 @@ class Util {
         }
     }
 
-    public static function currenctFormat($code, $price) {
+    public static function currencyFormat($code, $price) {
         if (!empty($_SESSION['currency'])) {
             $currency_from = $code;
             $currency_to = $_SESSION['currency'];
@@ -378,6 +378,7 @@ class Util {
             $price = self::currencyConverter($currency_from, $currency_to, $currency_input);
             $code = $_SESSION['currency'];
         }
+        $price = self::formatMoney($price, $currency_to);
         if (!empty($code) && array_key_exists($code, self::$currencies)) {
             if ($code == 'SEK') {
                 return $price . ' ' . self::$currencies[$code]['symbol'];
@@ -389,6 +390,141 @@ class Util {
         }
     }
 
+    //modified: new
+    public function formatMoney($money, $code = "USD"){
+        $currencies['ARS'] = array(2,',','.');          //  Argentine Peso
+        $currencies['AMD'] = array(2,'.',',');          //  Armenian Dram
+        $currencies['AWG'] = array(2,'.',',');          //  Aruban Guilder
+        $currencies['AUD'] = array(2,'.',' ');          //  Australian Dollar
+        $currencies['BSD'] = array(2,'.',',');          //  Bahamian Dollar
+        $currencies['BHD'] = array(3,'.',',');          //  Bahraini Dinar
+        $currencies['BDT'] = array(2,'.',',');          //  Bangladesh, Taka
+        $currencies['BZD'] = array(2,'.',',');          //  Belize Dollar
+        $currencies['BMD'] = array(2,'.',',');          //  Bermudian Dollar
+        $currencies['BOB'] = array(2,'.',',');          //  Bolivia, Boliviano
+        $currencies['BAM'] = array(2,'.',',');          //  Bosnia and Herzegovina, Convertible Marks
+        $currencies['BWP'] = array(2,'.',',');          //  Botswana, Pula
+        $currencies['BRL'] = array(2,',','.');          //  Brazilian Real
+        $currencies['BND'] = array(2,'.',',');          //  Brunei Dollar
+        $currencies['CAD'] = array(2,'.',',');          //  Canadian Dollar
+        $currencies['KYD'] = array(2,'.',',');          //  Cayman Islands Dollar
+        $currencies['CLP'] = array(0,'','.');           //  Chilean Peso
+        $currencies['CNY'] = array(2,'.',',');          //  China Yuan Renminbi
+        $currencies['COP'] = array(2,',','.');          //  Colombian Peso
+        $currencies['CRC'] = array(2,',','.');          //  Costa Rican Colon
+        $currencies['HRK'] = array(2,',','.');          //  Croatian Kuna
+        $currencies['CUC'] = array(2,'.',',');          //  Cuban Convertible Peso
+        $currencies['CUP'] = array(2,'.',',');          //  Cuban Peso
+        $currencies['CYP'] = array(2,'.',',');          //  Cyprus Pound
+        $currencies['CZK'] = array(2,'.',',');          //  Czech Koruna
+        $currencies['DKK'] = array(2,',','.');          //  Danish Krone
+        $currencies['DOP'] = array(2,'.',',');          //  Dominican Peso
+        $currencies['XCD'] = array(2,'.',',');          //  East Caribbean Dollar
+        $currencies['EGP'] = array(2,'.',',');          //  Egyptian Pound
+        $currencies['SVC'] = array(2,'.',',');          //  El Salvador Colon
+        $currencies['ATS'] = array(2,',','.');          //  Euro
+        $currencies['BEF'] = array(2,',','.');          //  Euro
+        $currencies['DEM'] = array(2,',','.');          //  Euro
+        $currencies['EEK'] = array(2,',','.');          //  Euro
+        $currencies['ESP'] = array(2,',','.');          //  Euro
+        $currencies['EUR'] = array(2,',','.');          //  Euro
+        $currencies['FIM'] = array(2,',','.');          //  Euro
+        $currencies['FRF'] = array(2,',','.');          //  Euro
+        $currencies['GRD'] = array(2,',','.');          //  Euro
+        $currencies['IEP'] = array(2,',','.');          //  Euro
+        $currencies['ITL'] = array(2,',','.');          //  Euro
+        $currencies['LUF'] = array(2,',','.');          //  Euro
+        $currencies['NLG'] = array(2,',','.');          //  Euro
+        $currencies['PTE'] = array(2,',','.');          //  Euro
+        $currencies['GHC'] = array(2,'.',',');          //  Ghana, Cedi
+        $currencies['GIP'] = array(2,'.',',');          //  Gibraltar Pound
+        $currencies['GTQ'] = array(2,'.',',');          //  Guatemala, Quetzal
+        $currencies['HNL'] = array(2,'.',',');          //  Honduras, Lempira
+        $currencies['HKD'] = array(2,'.',',');          //  Hong Kong Dollar
+        $currencies['HUF'] = array(0,'','.');           //  Hungary, Forint
+        $currencies['ISK'] = array(0,'','.');           //  Iceland Krona
+        $currencies['INR'] = array(2,'.',',');          //  Indian Rupee
+        $currencies['IDR'] = array(2,',','.');          //  Indonesia, Rupiah
+        $currencies['IRR'] = array(2,'.',',');          //  Iranian Rial
+        $currencies['JMD'] = array(2,'.',',');          //  Jamaican Dollar
+        $currencies['JPY'] = array(0,'',',');           //  Japan, Yen
+        $currencies['JOD'] = array(3,'.',',');          //  Jordanian Dinar
+        $currencies['KES'] = array(2,'.',',');          //  Kenyan Shilling
+        $currencies['KWD'] = array(3,'.',',');          //  Kuwaiti Dinar
+        $currencies['LVL'] = array(2,'.',',');          //  Latvian Lats
+        $currencies['LBP'] = array(0,'',' ');           //  Lebanese Pound
+        $currencies['LTL'] = array(2,',',' ');          //  Lithuanian Litas
+        $currencies['MKD'] = array(2,'.',',');          //  Macedonia, Denar
+        $currencies['MYR'] = array(2,'.',',');          //  Malaysian Ringgit
+        $currencies['MTL'] = array(2,'.',',');          //  Maltese Lira
+        $currencies['MUR'] = array(0,'',',');           //  Mauritius Rupee
+        $currencies['MXN'] = array(2,'.',',');          //  Mexican Peso
+        $currencies['MZM'] = array(2,',','.');          //  Mozambique Metical
+        $currencies['NPR'] = array(2,'.',',');          //  Nepalese Rupee
+        $currencies['ANG'] = array(2,'.',',');          //  Netherlands Antillian Guilder
+        $currencies['ILS'] = array(2,'.',',');          //  New Israeli Shekel
+        $currencies['TRY'] = array(2,'.',',');          //  New Turkish Lira
+        $currencies['NZD'] = array(2,'.',',');          //  New Zealand Dollar
+        $currencies['NOK'] = array(2,',','.');          //  Norwegian Krone
+        $currencies['PKR'] = array(2,'.',',');          //  Pakistan Rupee
+        $currencies['PEN'] = array(2,'.',',');          //  Peru, Nuevo Sol
+        $currencies['UYU'] = array(2,',','.');          //  Peso Uruguayo
+        $currencies['PHP'] = array(2,'.',',');          //  Philippine Peso
+        $currencies['PLN'] = array(2,'.',' ');          //  Poland, Zloty
+        $currencies['GBP'] = array(2,'.',',');          //  Pound Sterling
+        $currencies['OMR'] = array(3,'.',',');          //  Rial Omani
+        $currencies['RON'] = array(2,',','.');          //  Romania, New Leu
+        $currencies['ROL'] = array(2,',','.');          //  Romania, Old Leu
+        $currencies['RUB'] = array(2,',','.');          //  Russian Ruble
+        $currencies['SAR'] = array(2,'.',',');          //  Saudi Riyal
+        $currencies['SGD'] = array(2,'.',',');          //  Singapore Dollar
+        $currencies['SKK'] = array(2,',',' ');          //  Slovak Koruna
+        $currencies['SIT'] = array(2,',','.');          //  Slovenia, Tolar
+        $currencies['ZAR'] = array(2,'.',' ');          //  South Africa, Rand
+        $currencies['KRW'] = array(0,'',',');           //  South Korea, Won
+        $currencies['SZL'] = array(2,'.',', ');         //  Swaziland, Lilangeni
+        $currencies['SEK'] = array(2,',','.');          //  Swedish Krona
+        $currencies['CHF'] = array(2,'.','\'');         //  Swiss Franc 
+        $currencies['TZS'] = array(2,'.',',');          //  Tanzanian Shilling
+        $currencies['THB'] = array(2,'.',',');          //  Thailand, Baht
+        $currencies['TOP'] = array(2,'.',',');          //  Tonga, Paanga
+        $currencies['AED'] = array(2,'.',',');          //  UAE Dirham
+        $currencies['UAH'] = array(2,',',' ');          //  Ukraine, Hryvnia
+        $currencies['USD'] = array(2,'.',',');          //  US Dollar
+        $currencies['VUV'] = array(0,'',',');           //  Vanuatu, Vatu
+        $currencies['VEF'] = array(2,',','.');          //  Venezuela Bolivares Fuertes
+        $currencies['VEB'] = array(2,',','.');          //  Venezuela, Bolivar
+        $currencies['VND'] = array(0,'','.');           //  Viet Nam, Dong
+        $currencies['ZWD'] = array(2,'.',' ');          //  Zimbabwe Dollar
+
+        if ($code == "INR"){
+            return self::formatinr($money);
+        } else {
+            return number_format($money, $currencies[$code][0], $currencies[$code][1], $currencies[$code][2]);
+        }
+    }
+    
+    function formatINR($input){
+        //CUSTOM FUNCTION TO GENERATE ##,##,###.##
+        $dec = "";
+        $pos = strpos($input, ".");
+        if ($pos === false){
+            //no decimals   
+        } else {
+            //decimals
+            $dec = substr(round(substr($input,$pos),2),1);
+            $input = substr($input,0,$pos);
+        }
+        $num = substr($input,-3); //get the last 3 digits
+        $input = substr($input,0, -3); //omit the last 3 digits already stored in $num
+        while (strlen($input) > 0) //loop the process - further get digits 2 by 2
+        {
+            $num = substr($input,-2).",".$num;
+            $input = substr($input,0,-2);
+        }
+        return $num . $dec;
+    }
+    
     public static function replaceInquiryFormToken($searhing_in, $replacement) {
 
         foreach ($replacement as $k => $v) {
@@ -463,7 +599,14 @@ class Util {
          */
         $exchange_rate_filename = CONFIG_PATH . 'exchange.rate.php';
         if (!file_exists($exchange_rate_filename)) {
-            //TODO: access http://individualbali.com.dev/calendar/GzCalendar/refreshExchangeRate
+            $url = 'http://individualbali.com/cal/cron/daily-exchange-rate.php';
+            $curl_handle = curl_init();
+            curl_setopt($curl_handle, CURLOPT_URL, $url);
+            curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+            curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl_handle, CURLOPT_USERAGENT, 'IBH Calendar');
+            curl_exec($curl_handle);
+            curl_close($curl_handle);
         }
         require $exchange_rate_filename;
         if (isset($exchange_rate["$currency_from$currency_to"])) {

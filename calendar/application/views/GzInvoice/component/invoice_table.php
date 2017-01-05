@@ -30,7 +30,7 @@
                     <td>#<?php echo $tpl['arr'][$i]['invoice_number'] ?></td>
                     <td><?php echo $tpl['arr'][$i]['booking_number'] ?></td>
                     <td><?php echo $tpl['arr'][$i]['first_name'] . ' ' . $tpl['arr'][$i]['second_name']; ?></td>
-                    <td><?php echo Util::currenctFormat($tpl['option_arr_values']['currency'], $tpl['arr'][$i]['total']); ?></td>
+                    <td><?php echo Util::currencyFormat($tpl['option_arr_values']['currency'], $tpl['arr'][$i]['total']); ?></td>
                     <td><?php 
                     $status_arr = __('status_arr');
                     echo $status_arr[$tpl['arr'][$i]['status']]; 

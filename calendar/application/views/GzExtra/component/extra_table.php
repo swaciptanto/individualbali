@@ -34,7 +34,7 @@
                     $extra_type = __('extra_type');
                     ?>
                     <td><?php echo $v['title']; ?></td>
-                    <td><?php echo ($v['type'] == 'price') ? Util::currenctFormat($tpl['option_arr_values']['currency'], $v['price']) : $v['price'] . ' %'; ?></td>
+                    <td><?php echo ($v['type'] == 'price') ? Util::currencyFormat($tpl['option_arr_values']['currency'], $v['price']) : $v['price'] . ' %'; ?></td>
                     <td><?php echo $extra_per[$v['per']]; ?></td>
                     <td><?php echo $extra_type[$v['type']]; ?></td>
                     <td><a class="btn btn-success btn-sm icon-edit" href="<?php echo INSTALL_URL; ?>GzExtra/edit/<?php echo $v['id']; ?>" rev="<?php echo $v['id']; ?>" ><span class="glyphicon glyphicon-pencil"></span></a></td>
