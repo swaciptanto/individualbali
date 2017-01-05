@@ -15,7 +15,7 @@
                             $tpl['currencies_select'] = $tpl['option_arr_values']['currency'];
                         }
                         ?>
-                        <div class="col-xs-6">
+                        <div class="col-xs-12">
                             <select id="currencies-value-id" class="form-select input-sm form-control" name="currencies" tabindex="-1" aria-hidden="true">
                                 <?php
                                 foreach ($tpl['currencies'] as $key => $value) {
