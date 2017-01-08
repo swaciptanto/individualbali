@@ -105,9 +105,9 @@
                     <li class="<?php echo (@$_REQUEST['controller'] == 'GzStatistic' && @$_REQUEST['action'] == 'amount') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzStatistic/amount"><i class="fa    fa-caret-right"></i><?php echo __('amount_statistics'); ?></a></li>
                     <li class="<?php echo (@$_REQUEST['controller'] == 'GzStatistic' && @$_REQUEST['action'] == 'people') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzStatistic/people"><i class="fa    fa-caret-right"></i><?php echo __('people_statistics'); ?></a></li>
                 </ul>
-            </li>
+            </li>-->
             <?php if ($this->controller->isAdmin()) { ?>
-                <li class="treeview <?php echo (@$_REQUEST['controller'] == 'GzUser') ? "active" : ""; ?>">
+<!--                <li class="treeview <?php echo (@$_REQUEST['controller'] == 'GzUser') ? "active" : ""; ?>">
                     <a href="#">
                         <i class="fa fa-fw fa-user"></i>
                         <span><?php echo __('users'); ?></span>
@@ -117,9 +117,21 @@
                         <li class="<?php echo (@$_REQUEST['controller'] == 'GzUser' && @$_REQUEST['action'] == 'index') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzUser/index"><i class="fa    fa-caret-right"></i><?php echo __('all_users'); ?></a></li>
                         <li class="<?php echo (@$_REQUEST['controller'] == 'GzUser' && @$_REQUEST['action'] == 'create') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzUser/create"><i class="fa    fa-caret-right"></i><?php echo __('add_users'); ?></a></li>
                     </ul>
+                </li>-->
+                <li class="treeview <?php echo (@$_REQUEST['controller'] == 'GzAdmin') ? "active" : ""; ?>">
+                    <a href="#">
+                        <i class="fa fa-fw fa-clock-o"></i>
+                        <span><?php echo 'Cron'; ?></span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzAdmin' && @$_REQUEST['action'] == 'cron') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCron/run/iCal"><i class="fa    fa-caret-right" target="_blank"></i><?php echo 'Sync iCal'; ?></a></li>
+                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzAdmin' && @$_REQUEST['action'] == 'cron') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCron/run/exchangeRate"><i class="fa    fa-caret-right"></i><?php echo 'Update Exchange Rate'; ?></a></li>
+                    </ul>
                 </li>
             <?php } ?>
             <?php if ($this->controller->isAdmin()) { ?>
+<!--        modified: hide
                 <li class="<?php echo (@$_REQUEST['controller'] == 'GzSettings' && @$_REQUEST['action'] == 'languages') ? "active" : ""; ?>">
                     <a href="<?php echo INSTALL_URL; ?>GzSettings/languages">
                         <i class="fa fa-fw fa-book"></i> <span><?php echo __('Languages'); ?></span>

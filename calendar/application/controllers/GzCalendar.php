@@ -51,11 +51,7 @@ class GzCalendar extends App {
 
         switch (@$_REQUEST['action']) {
             case 'index':
-                $this->js[] = array('file' => '/ajax-upload/jquery.form.js', 'path' => JS_PATH);
-                break;
             case 'edit':
-                $this->js[] = array('file' => '/ajax-upload/jquery.form.js', 'path' => JS_PATH);
-                break;
             case 'block':
                 $this->js[] = array('file' => '/ajax-upload/jquery.form.js', 'path' => JS_PATH);
                 break;

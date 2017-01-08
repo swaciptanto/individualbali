@@ -697,10 +697,13 @@ class App extends Controller {
     
     function sendInquiryFormEmail($group){
         //modified: add new model
-        Object::loadFiles('Model', array('Option', 'User', 'Calendar', 'DrupalEmailReservation'));
+        Object::loadFiles('Model', array('Option', 'User', 'Calendar'));
         $OptionModel = new OptionModel();
         $CalendarModel = new CalendarModel();
         $UserModel = new UserModel();
+        $ibh_email_reservation = 'reservation@individualbali.com';
+        $ibh_email_info = 'info@individualbali.com';
+        $ibh_email_info_password = 'Great1ndividual';
 
         $calendar = $CalendarModel->get($_GET['cid']);
         $owner = $UserModel->get($calendar['user_id']);
@@ -741,17 +744,14 @@ class App extends Controller {
                 break;
             //modified: add new
             case 'reservation':
-                $DrupalEmailReservation = new DrupalEmailReservationModel();
-                $email_reservation_data = $DrupalEmailReservation->get($calendar['villa_node_id']);
                 $message = Util::replaceInquiryFormToken($option_arr['owner_inquiry_form'], $replacement);
                 $subjetc = $option_arr['owner_inquiry_form_subject'];
                 //$to = $calendar['villa_reservation_email'];
-                $to = $email_reservation_data['field_email_reservasi_value'];
+                $to = $ibh_email_reservation;
                 break;
         }
         
-        $admin_email = 'info@individualbali.com';
-        $option_arr['notify_email'] = $admin_email;
+        $option_arr['notify_email'] = $ibh_email_info;
         require_once APP_PATH . '/helpers/PHPMailer_5.2.4/class.phpmailer.php';
         try {
             //*/
@@ -763,8 +763,8 @@ class App extends Controller {
             $mail->Host = "mail.individualbali.com";
             $mail->Port = 587;
             $mail->SMTPSecure = 'tls';
-            $mail->Username = 'admin@individualbali.com';
-            $mail->Password = 'Rian&Dewa';
+            $mail->Username = $ibh_email_info;
+            $mail->Password = $ibh_email_info_password;
             $mail->AddReplyTo($option_arr['notify_email'], "Admin");
             $mail->From = $option_arr['notify_email'];
             $mail->FromName = $option_arr['notify_email'];

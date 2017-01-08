@@ -64,10 +64,12 @@ class CalendarModel extends AppModel {
                 }
             }
         }
-        /* $query->debug=true;
-          echo $query->getQuery();
-          print_r($query->getParameters());
-          echo '<br />'; */
+        /*
+            $query->debug=true;
+            echo $query->getQuery();
+            print_r($query->getParameters());
+            echo '<br />'; 
+        */
         return $result;
     }
 

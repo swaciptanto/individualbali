@@ -4,13 +4,15 @@
         var url = $("#container-abc-url-id").text();
 
         if ($('#gz-booking-calendar-id').length > 0) {
-            $('#gz-booking-calendar-id').dataTable({
+            var oTable = $('#gz-booking-calendar-id').dataTable({
                 "aoColumnDefs": [
                     //modified: changed
                     //{'bSortable': false, 'aTargets': [0, 4, 5, 6]}
                     {'bSortable': false, 'aTargets': [0, 1, 5, 6, 7]}
                 ]
             });
+            //sort by column id desc
+            oTable.fnSort([[2, "desc"]]);
         }
 
         if ($('#general-options-id').length > 0) {

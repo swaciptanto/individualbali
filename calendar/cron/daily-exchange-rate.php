@@ -64,7 +64,7 @@ function refreshExchangeRate()
     }
 }
 
-echo "Start on " . date('d-m-Y H:i:s') . "\n";
+echo "Start on " . date('d-m-Y H:i:s') . "\n\n";
 refreshExchangeRate();
-echo "Done on " . date('d-m-Y H:i:s') . "\n";
+echo "\nDone on " . date('d-m-Y H:i:s') . "\n";
 

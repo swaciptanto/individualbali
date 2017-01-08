@@ -1693,6 +1693,7 @@ INSERT INTO `gz_abc_i18n_local` (`id`, `language_id`, `type`, `layout`, `value`,
 (NULL, 3, 'text', 'backhand', 'Message has benn send successful', 'Message has benn send successful', 'inquiry_form_success_result', '0'),
 (NULL, 3, 'text', 'backhand', 'Owner emails', 'Owner emails', 'owner_emails', '0'),
 (NULL, 3, 'array', 'backhand', 'Imported has been success!', 'Imported has been success!', 'status', '30');
+(NULL, 3, 'array', 'backhand', 'Cron run successfully!', 'Cron run successfully!', 'status', '31');
 
 INSERT INTO `gz_abc_i18n_local` (`id`, `language_id`, `type`, `layout`, `value`, `field`, `key`, `arr_key`) VALUES
 (NULL, 3, 'text', 'backhand', 'Import your ics Caledanr', 'Import your ics Caledanr', 'label_ics_file', '0'),

@@ -305,7 +305,7 @@ class GzFront extends App {
         $this->isAjax = true;
         
         $this->sendInquiryFormEmail('client');
-        $this->sendInquiryFormEmail('admin');
+        //$this->sendInquiryFormEmail('admin');
         //modified: change to reservation email
         //$this->sendInquiryFormEmail('owner');
         $this->sendInquiryFormEmail('reservation');
