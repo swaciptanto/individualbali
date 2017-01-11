@@ -1,3 +1,4 @@
+<?php foreach ($_GET['cid'] as $cid) { ?>
 <div id="webform-ajax-wrapper-1083">
     <form id="webform-client-form" class="webform-client-form webform-client-form-1083" action="/bali-individually/villas/verve-villa-lombok" method="post" accept-charset="UTF-8">
         <div class="form-title visible-lg visible-md">
@@ -285,10 +286,14 @@
         <div class="row">
             <div class="col-xs-12">
                 <button class="btn btn-md btn-inquiry btn-block" type="submit">Send Enquiry</button>
+                <?php if (isset($tpl['ical_url'][$cid])
+                        && $tpl['ical_url'][$cid] !== ''
+                        && !is_null($tpl['ical_url'][$cid])) { ?>
                 <!-- modified: add new-->
                 <p class="text-center">or</p>
                 <!-- modified: add new-->
                 <button class="btn btn-md btn-book-now btn-block" type="submit">Book Now</button>
+                <?php } ?>
                 <p class="text-center">
                     Do you have any questions?
                     <br>
@@ -328,6 +333,7 @@
         </div>
     </form>
 </div>
+<?php } ?>
 
 <script type="text/javascript">
     var GzAvailabilityCalendarObj = new Array();

@@ -224,12 +224,20 @@ class GzFront extends App {
     function inquiry_form() {
         header("content-type: application/javascript");
         
-        Object::loadFiles('Model', 'Option');
+        Object::loadFiles('Model', ['Option', 'Calendar', 'DrupalICalURL']);
         $OptionModel = new OptionModel();
+        $CalendarModel = new CalendarModel();
+        $DrupalICalURLModel = new DrupalICalURLModel();
 
         foreach ($_GET['cid'] as $cid) {
             $opts = array();
             $cal_id = $cid;
+            $villa_node_id = $CalendarModel->get($cid)['villa_node_id'];
+            $ical_url = '';
+            if ((int)$villa_node_id > 0) {
+                $ical_url = $DrupalICalURLModel->get($villa_node_id)['field_ical_url_value'];
+            }
+            $this->tpl['ical_url'][$cid] = $ical_url;
             $opts['calendar_id'] = $cid;
             $this->tpl['option_arr_values'][$cid] = $OptionModel->getAllPairValues($opts);
         }
@@ -248,12 +256,20 @@ class GzFront extends App {
     function modal_form() {
         header("content-type: application/javascript");
         
-        Object::loadFiles('Model', 'Option');
+        Object::loadFiles('Model', ['Option', 'Calendar', 'DrupalICalURL']);
         $OptionModel = new OptionModel();
+        $CalendarModel = new CalendarModel();
+        $DrupalICalURLModel = new DrupalICalURLModel();
 
         foreach ($_GET['cid'] as $cid) {
             $opts = array();
             $cal_id = $cid;
+            $villa_node_id = $CalendarModel->get($cid)['villa_node_id'];
+            $ical_url = '';
+            if ((int)$villa_node_id > 0) {
+                $ical_url = $DrupalICalURLModel->get($villa_node_id)['field_ical_url_value'];
+            }
+            $this->tpl['ical_url'][$cid] = $ical_url;
             $opts['calendar_id'] = $cid;
             $this->tpl['option_arr_values'][$cid] = $OptionModel->getAllPairValues($opts);
         }

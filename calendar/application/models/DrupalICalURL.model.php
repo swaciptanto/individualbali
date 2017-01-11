@@ -2,7 +2,7 @@
 
 require_once MODELS_PATH . 'AppDrupal.model.php';
 
-class DrupalICalModel extends AppDrupalModel {
+class DrupalICalURLModel extends AppDrupalModel {
 
     var $primaryKey = 'entity_id';
     var $table = 'field_data_field_ical_url';

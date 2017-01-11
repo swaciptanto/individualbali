@@ -1,3 +1,4 @@
+<?php foreach ($_GET['cid'] as $cid) { ?>
 <div id="myBooking" class="modal fade booking" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -288,10 +289,14 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <button class="btn btn-md btn-inquiry btn-modal btn-block" type="submit">Send Enquiry</button>
-                    <!-- modified: add new-->
-                    <p class="text-center">or</p>
-                    <!-- modified: add new-->
-                    <button class="btn btn-md btn-book-now btn-block" type="submit">Book Now</button>
+                            <?php if (isset($tpl['ical_url'][$cid])
+                                    && $tpl['ical_url'][$cid] !== ''
+                                    && !is_null($tpl['ical_url'][$cid])) { ?>
+                            <!-- modified: add new-->
+                            <p class="text-center">or</p>
+                            <!-- modified: add new-->
+                            <button class="btn btn-md btn-book-now btn-block" type="submit">Book Now</button>
+                            <?php } ?>
                             <p class="text-center">
                                 Do you have any questions?
                                 <br>
@@ -334,6 +339,7 @@
         </div>
     </div>
 </div>
+<?php } ?>
 <script type="text/javascript">
     var GzAvailabilityCalendarObj = new Array();
 

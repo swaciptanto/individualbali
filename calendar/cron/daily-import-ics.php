@@ -23,7 +23,7 @@ function autoImportICSForBlocking()
             ->fetchAll();
     $blocked_added = array();
     if (is_array($calendar_villa_datas) && count($calendar_villa_datas) > 0) {
-        $DrupalICalURLModel = new DrupalICalModel;
+        $DrupalICalURLModel = new DrupalICalURLModel;
         $BlockingModel = new BlockingModel();
         //loop all calendar villa
         foreach ($calendar_villa_datas as $calendar_villa_data) {
