@@ -144,6 +144,10 @@ class GzFront extends App {
         $this->layout = 'empty';
     }
     
+    function load_low_rate_display() {
+        $this->layout = 'empty';
+    }
+    
     function getReservation($m, $day, $y, $cid) {
         Object::loadFiles('Model', array('Booking'));
         $BookingModel = new BookingModel();
@@ -253,6 +257,49 @@ class GzFront extends App {
         }
     }
 
+    function getLowRateDisplayData($calendar_id) 
+    {
+        Object::loadFiles('Model', ['Calendar', 'DrupalRateLow']);
+        $CalendarModel = new CalendarModel();
+        $DrupalRateLowModel = new DrupalRateLowModel();
+        
+        $rate_low = 0;
+        $rate_currency = 'USD';
+        if ((int)$calendar_id > 0) {
+            $opts = array();
+            $opts['calendar_id'] = $calendar_id;
+            $villa_node_id = $CalendarModel->get($calendar_id)['villa_node_id'];
+            if ((int)$villa_node_id > 0) {
+                $rate_low_usd = (float)$DrupalRateLowModel->get($villa_node_id)['field_rate_low_value'];
+                $currency_to = !empty($_SESSION['currency'])
+                        ? $_SESSION['currency'] : 'USD';
+                $rate_low = Util::formatMoney(
+                        Util::currencyConverter('USD', $currency_to, $rate_low_usd),
+                        $currency_to);
+                $rate_currency = $currency_to;
+            }
+        }
+        $currency_symbol = Util::getCurrencySimbol($rate_currency);
+        $country_code = ($currency_symbol === "$")
+                ? $rate_currency{0} . $rate_currency{1} : '';
+        return [
+                'rate_low' => $rate_low,
+                'currency_symbol' => $currency_symbol,
+                'country_code' => $country_code
+            ];
+    }
+    
+    function low_rate_display() 
+    {
+        header("content-type: application/javascript");
+        $low_rate_data = $this->getLowRateDisplayData($_GET['cid']);
+        $this->tpl = [
+            'rate_low' => $low_rate_data['rate_low'],
+            'currency_symbol' => $low_rate_data['currency_symbol'],
+            'country_code' => $low_rate_data['country_code']
+        ];
+    }
+    
     function modal_form() {
         header("content-type: application/javascript");
         
@@ -764,6 +811,17 @@ class GzFront extends App {
                 echo "The address verification system returned an unknown value.";
                 break;
         }
+    }
+    
+    function convertCurrency()
+    {
+        $this->isAjax = true;
+        $low_rate_data = $this->getLowRateDisplayData($_GET['cid']);
+        $result['rate_low'] = $low_rate_data['rate_low'];
+        $result['currency_symbol'] = $low_rate_data['currency_symbol'];
+        $result['country_code'] = $low_rate_data['country_code'];
+        header("Content-Type: application/json", true);
+        echo json_encode($result);
     }
     
     function calculateInquiryFormPrice() {

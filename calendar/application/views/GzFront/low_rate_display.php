@@ -1,0 +1,1 @@
+<span id="title-low-rate"><?php echo $tpl['country_code'] . ($tpl['country_code'] !== '' ? ' ' : '') . "$tpl[currency_symbol] $tpl[rate_low]"; ?></span>

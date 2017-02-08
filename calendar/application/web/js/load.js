@@ -177,6 +177,7 @@ var gz$ = jQuery.noConflict();
                         success: function (res) {
                             self.calculateInquiryFormPrice.call(self, this);
                             self.ABCCalendar.call(self, this);
+                            self.convertCurrency.call(self, this);
                         }
                     });
                 });
@@ -787,6 +788,34 @@ var gz$ = jQuery.noConflict();
                     if (gz$("#total").length > 0) {
                         gz$("#total").html(json.formated_total);
                     }
+                }
+            });
+        },
+        convertCurrency: function () {
+            var self = this;
+            var $screen = gz$(document).width();
+            if ($screen <= 991) {
+                var frm = gz$('#modal-webform-client-form');
+            } else {
+                var frm = gz$('#webform-client-form');
+            }
+            gz$.ajax({
+                type: "POST",
+                dataType: 'json',
+                data: frm.serialize(),
+                url: self.options.server
+                        + "index.php?controller=GzFront&action=convertCurrency"
+                        + "&cid=" + self.options.cal_id,
+                success: function (res) {
+                    var title_low_rate = '';
+                    var country_code = res.country_code;
+                    var currency_symbol = res.currency_symbol;
+                    var rate_low = res.rate_low;
+                    if (country_code !== '') {
+                        title_low_rate = country_code + ' ';
+                    }
+                    title_low_rate += currency_symbol + ' ' + rate_low;
+                    $("#title-low-rate").html(title_low_rate);
                 }
             });
         }

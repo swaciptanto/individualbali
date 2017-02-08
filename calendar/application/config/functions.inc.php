@@ -391,7 +391,7 @@ class Util {
     }
 
     //modified: new
-    public function formatMoney($money, $code = "USD"){
+    public static function formatMoney($money, $code = "USD"){
         $currencies['ARS'] = array(2,',','.');          //  Argentine Peso
         $currencies['AMD'] = array(2,'.',',');          //  Armenian Dram
         $currencies['AWG'] = array(2,'.',',');          //  Aruban Guilder
