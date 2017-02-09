@@ -257,27 +257,27 @@ class GzFront extends App {
         }
     }
 
-    function getLowRateDisplayData($calendar_id) 
+    function getLowRateDisplayData($villa_node_id, $calendar_id = '') 
     {
         Object::loadFiles('Model', ['Calendar', 'DrupalRateLow']);
-        $CalendarModel = new CalendarModel();
         $DrupalRateLowModel = new DrupalRateLowModel();
         
         $rate_low = 0;
         $rate_currency = 'USD';
         if ((int)$calendar_id > 0) {
+            $CalendarModel = new CalendarModel();
             $opts = array();
             $opts['calendar_id'] = $calendar_id;
             $villa_node_id = $CalendarModel->get($calendar_id)['villa_node_id'];
-            if ((int)$villa_node_id > 0) {
-                $rate_low_usd = (float)$DrupalRateLowModel->get($villa_node_id)['field_rate_low_value'];
-                $currency_to = !empty($_SESSION['currency'])
-                        ? $_SESSION['currency'] : 'USD';
-                $rate_low = Util::formatMoney(
-                        Util::currencyConverter('USD', $currency_to, $rate_low_usd),
-                        $currency_to);
-                $rate_currency = $currency_to;
-            }
+        }
+        if ((int)$villa_node_id > 0) {
+            $rate_low_usd = (float)$DrupalRateLowModel->get($villa_node_id)['field_rate_low_value'];
+            $currency_to = !empty($_SESSION['currency'])
+                    ? $_SESSION['currency'] : 'USD';
+            $rate_low = Util::formatMoney(
+                    Util::currencyConverter('USD', $currency_to, $rate_low_usd),
+                    $currency_to);
+            $rate_currency = $currency_to;
         }
         $currency_symbol = Util::getCurrencySimbol($rate_currency);
         $country_code = ($currency_symbol === "$")
@@ -292,7 +292,7 @@ class GzFront extends App {
     function low_rate_display() 
     {
         header("content-type: application/javascript");
-        $low_rate_data = $this->getLowRateDisplayData($_GET['cid']);
+        $low_rate_data = $this->getLowRateDisplayData($_GET['vnid']);
         $this->tpl = [
             'rate_low' => $low_rate_data['rate_low'],
             'currency_symbol' => $low_rate_data['currency_symbol'],
@@ -816,7 +816,7 @@ class GzFront extends App {
     function convertCurrency()
     {
         $this->isAjax = true;
-        $low_rate_data = $this->getLowRateDisplayData($_GET['cid']);
+        $low_rate_data = $this->getLowRateDisplayData($_GET['vnid']);
         $result['rate_low'] = $low_rate_data['rate_low'];
         $result['currency_symbol'] = $low_rate_data['currency_symbol'];
         $result['country_code'] = $low_rate_data['country_code'];

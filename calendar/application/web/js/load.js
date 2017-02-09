@@ -805,7 +805,7 @@ var gz$ = jQuery.noConflict();
                 data: frm.serialize(),
                 url: self.options.server
                         + "index.php?controller=GzFront&action=convertCurrency"
-                        + "&cid=" + self.options.cal_id,
+                        + "&vnid=" + self.options.villa_node_id,
                 success: function (res) {
                     var title_low_rate = '';
                     var country_code = res.country_code;

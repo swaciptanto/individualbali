@@ -97,6 +97,7 @@ foreach ($_GET['cid'] as $cid) {
                     month: "<?php echo date('n'); ?>",
                     year: "<?php echo date('Y'); ?>",
                     view_month: "<?php echo $_GET['view_month']; ?>",
+                    villa_node_id: "<?php echo @$_GET['vnid']; ?>",
                     enable_booking: "<?php echo $tpl['option_arr_values'][$cid]['enable_booking']; ?>",
                     based_on: "<?php echo $tpl['option_arr_values'][$cid]['based_on']; ?>",
                     locale: 1,
