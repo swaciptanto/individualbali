@@ -64,45 +64,49 @@ class GzFront extends App {
      * @see core/framework/Controller::beforeRender()
      */
     function beforeRender() {
-        if ($_REQUEST['action'] == 'inquiry_form') {
-            $this->css[] = array('file' => 'front/bootstrap.min.css', 'path' => CSS_PATH);
-            $this->css[] = array('file' => 'front/inquiry_form.css', 'path' => CSS_PATH);
-            $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
-            $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
-        } elseif($_REQUEST['action'] != 'modal_form') {
-            $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
-            $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
-            $this->css[] = array('file' => 'gzadmin/plugins/lada/ladda-themeless.min.css', 'path' => JS_PATH);
-            $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/tooltipster.css', 'path' => JS_PATH);
-            $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/themes/tooltipster-light.css', 'path' => JS_PATH);
-            $this->css[] = array('file' => 'gzadmin/plugins/lada/prism.css', 'path' => JS_PATH);
-        }
-        foreach ($_GET['cid'] as $cid) {
-            $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
-        }
-         
-        $this->js[] = array('file' => 'jquery-2.0.2.min.js', 'path' => LIBS_PATH);
-        $this->js[] = array('file' => 'jquery-ui.js', 'path' => LIBS_PATH);
-        
-        if ($_REQUEST['action'] == 'inquiry_form') {
-            //$this->js[] = array('file' => 'gzadmin/bootstrap-3.3.5.min.js', 'path' => JS_PATH);
-            $this->js[] = array('file' => 'gzadmin/plugins/jquery-validation-1.14.0/jquery.validate-1.14.0.min.js', 'path' => JS_PATH);
-            $this->js[] = array('file' => 'gzadmin/plugins/bootstrap-tooltip/jquery-validate.bootstrap-tooltip.min.js', 'path' => JS_PATH);
-            /* modified: add 3 js file, since there some action in inquiry_form
-             * need to refresh availability calendar
-             */
-            $this->js[] = array('file' => 'gzadmin/plugins/tooltipster/js/jquery.tooltipster.min.js', 'path' => JS_PATH);
-            $this->js[] = array('file' => 'jquery/jquery-validation-1.13.0/dist/jquery.validate.min.js', 'path' => LIBS_PATH);
-            $this->js[] = array('file' => 'load.js', 'path' => JS_PATH);
-        } elseif($_REQUEST['action'] != 'modal_form'){
-            $this->js[] = array('file' => 'jquery/jquery-validation-1.13.0/dist/jquery.validate.min.js', 'path' => LIBS_PATH);
-        }
-        if ($_REQUEST['action'] == 'index') {
-            $this->js[] = array('file' => 'jquery.colorbox-min.js', 'path' => LIBS_PATH);
-            $this->js[] = array('file' => 'gzadmin/plugins/lada/spin.min.js', 'path' => JS_PATH);
-            $this->js[] = array('file' => 'gzadmin/plugins/lada/ladda.min.js', 'path' => JS_PATH);
-            $this->js[] = array('file' => 'gzadmin/plugins/tooltipster/js/jquery.tooltipster.min.js', 'path' => JS_PATH);
-            $this->js[] = array('file' => 'load.js', 'path' => JS_PATH);
+        //low rate display not need supplied with css and js
+        if ($_REQUEST['action'] != 'low_rate_display') {
+            //load css
+            if ($_REQUEST['action'] == 'inquiry_form') {
+                $this->css[] = array('file' => 'front/bootstrap.min.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/inquiry_form.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
+            } elseif($_REQUEST['action'] != 'modal_form') {
+                $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/lada/ladda-themeless.min.css', 'path' => JS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/tooltipster.css', 'path' => JS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/themes/tooltipster-light.css', 'path' => JS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/lada/prism.css', 'path' => JS_PATH);
+            }
+            foreach ($_GET['cid'] as $cid) {
+                $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
+            }
+
+            //load js
+            $this->js[] = array('file' => 'jquery-2.0.2.min.js', 'path' => LIBS_PATH);
+            $this->js[] = array('file' => 'jquery-ui.js', 'path' => LIBS_PATH);
+            if ($_REQUEST['action'] == 'inquiry_form') {
+                //$this->js[] = array('file' => 'gzadmin/bootstrap-3.3.5.min.js', 'path' => JS_PATH);
+                $this->js[] = array('file' => 'gzadmin/plugins/jquery-validation-1.14.0/jquery.validate-1.14.0.min.js', 'path' => JS_PATH);
+                $this->js[] = array('file' => 'gzadmin/plugins/bootstrap-tooltip/jquery-validate.bootstrap-tooltip.min.js', 'path' => JS_PATH);
+                /* modified: add 3 js file below, since there some action in inquiry_form
+                 * which need to refresh availability calendar
+                 */
+                $this->js[] = array('file' => 'gzadmin/plugins/tooltipster/js/jquery.tooltipster.min.js', 'path' => JS_PATH);
+                $this->js[] = array('file' => 'jquery/jquery-validation-1.13.0/dist/jquery.validate.min.js', 'path' => LIBS_PATH);
+                $this->js[] = array('file' => 'load.js', 'path' => JS_PATH);
+            } elseif ($_REQUEST['action'] != 'modal_form'){
+                $this->js[] = array('file' => 'jquery/jquery-validation-1.13.0/dist/jquery.validate.min.js', 'path' => LIBS_PATH);
+            }
+            if ($_REQUEST['action'] == 'index') {
+                $this->js[] = array('file' => 'jquery.colorbox-min.js', 'path' => LIBS_PATH);
+                $this->js[] = array('file' => 'gzadmin/plugins/lada/spin.min.js', 'path' => JS_PATH);
+                $this->js[] = array('file' => 'gzadmin/plugins/lada/ladda.min.js', 'path' => JS_PATH);
+                $this->js[] = array('file' => 'gzadmin/plugins/tooltipster/js/jquery.tooltipster.min.js', 'path' => JS_PATH);
+                $this->js[] = array('file' => 'load.js', 'path' => JS_PATH);
+            }
         }
     }
 
