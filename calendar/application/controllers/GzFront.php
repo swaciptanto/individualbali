@@ -292,11 +292,13 @@ class GzFront extends App {
     function low_rate_display() 
     {
         header("content-type: application/javascript");
-        $low_rate_data = $this->getLowRateDisplayData($_GET['vnid']);
+        $villa_node_id = $_GET['vnid'];
+        $low_rate_data = $this->getLowRateDisplayData($villa_node_id);
         $this->tpl = [
             'rate_low' => $low_rate_data['rate_low'],
             'currency_symbol' => $low_rate_data['currency_symbol'],
-            'country_code' => $low_rate_data['country_code']
+            'country_code' => $low_rate_data['country_code'],
+            'villa_node_id' => $villa_node_id
         ];
     }
     

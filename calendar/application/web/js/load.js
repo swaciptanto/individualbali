@@ -799,24 +799,28 @@ var gz$ = jQuery.noConflict();
             } else {
                 var frm = gz$('#webform-client-form');
             }
-            gz$.ajax({
-                type: "POST",
-                dataType: 'json',
-                data: frm.serialize(),
-                url: self.options.server
-                        + "index.php?controller=GzFront&action=convertCurrency"
-                        + "&vnid=" + self.options.villa_node_id,
-                success: function (res) {
-                    var title_low_rate = '';
-                    var country_code = res.country_code;
-                    var currency_symbol = res.currency_symbol;
-                    var rate_low = res.rate_low;
-                    if (country_code !== '') {
-                        title_low_rate = country_code + ' ';
+            $(".title-low-rate").each(function() {
+                var element_low_rate = $(this);
+                var villa_node_id = element_low_rate.find(":hidden").val();
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    data: frm.serialize(),
+                    url: self.options.server
+                            + "index.php?controller=GzFront&action=convertCurrency"
+                            + "&vnid=" + villa_node_id,
+                    success: function (res) {
+                        var title_low_rate = '';
+                        var country_code = res.country_code;
+                        var currency_symbol = res.currency_symbol;
+                        var rate_low = res.rate_low;
+                        if (country_code !== '') {
+                            title_low_rate = country_code + ' ';
+                        }
+                        title_low_rate += currency_symbol + ' ' + rate_low;
+                        element_low_rate.find("span").html(title_low_rate);
                     }
-                    title_low_rate += currency_symbol + ' ' + rate_low;
-                    $("#title-low-rate").html(title_low_rate);
-                }
+                });
             });
         }
     }
