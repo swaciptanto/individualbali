@@ -17,7 +17,7 @@
                         }
                         ?>
                         <div class="col-xs-12">
-                            <select id="currencies-value-id" class="form-select input-sm form-control" name="currencies" tabindex="-1" aria-hidden="true">
+                            <select id="currencies-value-id-modal" class="form-select input-sm form-control hidden" name="currencies" tabindex="-1" aria-hidden="true">
                                 <?php
                                 foreach ($tpl['currencies'] as $key => $value) {
                                     ?>

@@ -160,12 +160,20 @@ var gz$ = jQuery.noConflict();
                 self.bindModalDatePicker.call(self, this);
             }
             //modified: add to only some action could activated this
-            if (this.options.action == 'load_inquiry_form' || this.options.action == 'load_modal_form') {
+            if (this.options.action == 'load_inquiry_form'
+                    || this.options.action == 'load_modal_form'
+                    || this.options.action == 'load_currency_display') {
                 gz$(document).delegate(".btn-inquiry", "click", function (e) {
                     e.preventDefault();
                     self.sendInquiryForm.call(self, this);
-                }).delegate("#currencies-value-id", "change", function (e) {
-
+                }).delegate("#currencies-value-id, #currencies-value-id-modal, #currencies-selector", "change", function (e) {
+                    if ($(this).prop("id") === "currencies-selector") {
+                        if ($(".btn-booking").is(":visible")) {
+                            $("#currencies-value-id-modal").val($(this).val());
+                        } else {
+                            $("#currencies-value-id").val($(this).val());
+                        }
+                    }
                     var currancy = gz$(this).val();
 
                     gz$.ajax({
@@ -824,6 +832,5 @@ var gz$ = jQuery.noConflict();
             });
         }
     }
-
     window.GzAvailabilityCalendar = GzAvailabilityCalendar;
 })(window);

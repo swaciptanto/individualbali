@@ -67,27 +67,29 @@ class GzFront extends App {
         //low rate display not need supplied with css and js
         if ($_REQUEST['action'] != 'low_rate_display') {
             //load css
-            if ($_REQUEST['action'] == 'inquiry_form') {
-                $this->css[] = array('file' => 'front/bootstrap.min.css', 'path' => CSS_PATH);
-                $this->css[] = array('file' => 'front/inquiry_form.css', 'path' => CSS_PATH);
-                $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
-                $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
-            } elseif($_REQUEST['action'] != 'modal_form') {
-                $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
-                $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
-                $this->css[] = array('file' => 'gzadmin/plugins/lada/ladda-themeless.min.css', 'path' => JS_PATH);
-                $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/tooltipster.css', 'path' => JS_PATH);
-                $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/themes/tooltipster-light.css', 'path' => JS_PATH);
-                $this->css[] = array('file' => 'gzadmin/plugins/lada/prism.css', 'path' => JS_PATH);
-            }
-            foreach ($_GET['cid'] as $cid) {
-                $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
+            if ($_REQUEST['action'] != 'currency_display') {
+                if ($_REQUEST['action'] == 'inquiry_form') {
+                    $this->css[] = array('file' => 'front/bootstrap.min.css', 'path' => CSS_PATH);
+                    $this->css[] = array('file' => 'front/inquiry_form.css', 'path' => CSS_PATH);
+                    $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
+                    $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
+                } elseif($_REQUEST['action'] != 'modal_form') {
+                    $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
+                    $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
+                    $this->css[] = array('file' => 'gzadmin/plugins/lada/ladda-themeless.min.css', 'path' => JS_PATH);
+                    $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/tooltipster.css', 'path' => JS_PATH);
+                    $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/themes/tooltipster-light.css', 'path' => JS_PATH);
+                    $this->css[] = array('file' => 'gzadmin/plugins/lada/prism.css', 'path' => JS_PATH);
+                }
+                foreach ($_GET['cid'] as $cid) {
+                    $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
+                }
             }
 
             //load js
             $this->js[] = array('file' => 'jquery-2.0.2.min.js', 'path' => LIBS_PATH);
             $this->js[] = array('file' => 'jquery-ui.js', 'path' => LIBS_PATH);
-            if ($_REQUEST['action'] == 'inquiry_form') {
+            if ($_REQUEST['action'] == 'inquiry_form' || $_REQUEST['action'] == 'currency_display') {
                 //$this->js[] = array('file' => 'gzadmin/bootstrap-3.3.5.min.js', 'path' => JS_PATH);
                 $this->js[] = array('file' => 'gzadmin/plugins/jquery-validation-1.14.0/jquery.validate-1.14.0.min.js', 'path' => JS_PATH);
                 $this->js[] = array('file' => 'gzadmin/plugins/bootstrap-tooltip/jquery-validate.bootstrap-tooltip.min.js', 'path' => JS_PATH);
@@ -149,6 +151,10 @@ class GzFront extends App {
     }
     
     function load_low_rate_display() {
+        $this->layout = 'empty';
+    }
+    
+    function load_currency_display() {
         $this->layout = 'empty';
     }
     
@@ -261,6 +267,12 @@ class GzFront extends App {
         }
     }
 
+    function currency_display()
+    {
+        header("content-type: application/javascript");
+        $this->tpl['calendar_id'] = $_GET['cid'];
+    }
+    
     function getLowRateDisplayData($villa_node_id, $calendar_id = '') 
     {
         Object::loadFiles('Model', ['Calendar', 'DrupalRateLow']);
