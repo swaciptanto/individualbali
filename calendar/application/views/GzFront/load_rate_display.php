@@ -3,7 +3,7 @@ unset($_REQUEST['controller']);
 unset($_REQUEST['action']);
 
 $_REQUEST['controller'] = "GzFront";
-$_REQUEST['action'] = "low_rate_display";
+$_REQUEST['action'] = "rate_display";
 
 ob_start();
 

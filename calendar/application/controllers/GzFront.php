@@ -64,8 +64,8 @@ class GzFront extends App {
      * @see core/framework/Controller::beforeRender()
      */
     function beforeRender() {
-        //low rate display not need supplied with css and js
-        if ($_REQUEST['action'] != 'low_rate_display') {
+        //rate display not need supplied with css and js
+        if ($_REQUEST['action'] != 'rate_display') {
             //load css
             if ($_REQUEST['action'] != 'currency_display') {
                 if ($_REQUEST['action'] == 'inquiry_form') {
@@ -150,7 +150,7 @@ class GzFront extends App {
         $this->layout = 'empty';
     }
     
-    function load_low_rate_display() {
+    function load_rate_display() {
         $this->layout = 'empty';
     }
     
@@ -278,7 +278,7 @@ class GzFront extends App {
         Object::loadFiles('Model', ['Calendar', 'DrupalRateLow']);
         $DrupalRateLowModel = new DrupalRateLowModel();
         
-        $rate_low = 0;
+        $rate = 0;
         $rate_currency = 'USD';
         if ((int)$calendar_id > 0) {
             $CalendarModel = new CalendarModel();
@@ -287,11 +287,11 @@ class GzFront extends App {
             $villa_node_id = $CalendarModel->get($calendar_id)['villa_node_id'];
         }
         if ((int)$villa_node_id > 0) {
-            $rate_low_usd = (float)$DrupalRateLowModel->get($villa_node_id)['field_rate_low_value'];
+            $rate_usd = (float)$DrupalRateLowModel->get($villa_node_id)['field_rate_low_value'];
             $currency_to = !empty($_SESSION['currency'])
                     ? $_SESSION['currency'] : 'USD';
-            $rate_low = Util::formatMoney(
-                    Util::currencyConverter('USD', $currency_to, $rate_low_usd),
+            $rate = Util::formatMoney(
+                    Util::currencyConverter('USD', $currency_to, $rate_usd),
                     $currency_to);
             $rate_currency = $currency_to;
         }
@@ -299,22 +299,94 @@ class GzFront extends App {
         $country_code = ($currency_symbol === "$")
                 ? $rate_currency{0} . $rate_currency{1} : '';
         return [
-                'rate_low' => $rate_low,
+                'rate' => $rate,
                 'currency_symbol' => $currency_symbol,
                 'country_code' => $country_code
             ];
     }
     
-    function low_rate_display() 
+    function getHighRateDisplayData($villa_node_id, $calendar_id = '') 
+    {
+        Object::loadFiles('Model', ['Calendar', 'DrupalRateHigh']);
+        $DrupalRateHighModel = new DrupalRateHighModel();
+        
+        $rate = 0;
+        $rate_currency = 'USD';
+        if ((int)$calendar_id > 0) {
+            $CalendarModel = new CalendarModel();
+            $opts = array();
+            $opts['calendar_id'] = $calendar_id;
+            $villa_node_id = $CalendarModel->get($calendar_id)['villa_node_id'];
+        }
+        if ((int)$villa_node_id > 0) {
+            $rate_usd = (float)$DrupalRateHighModel->get($villa_node_id)['field_rate_high_value'];
+            $currency_to = !empty($_SESSION['currency'])
+                    ? $_SESSION['currency'] : 'USD';
+            $rate = Util::formatMoney(
+                    Util::currencyConverter('USD', $currency_to, $rate_usd),
+                    $currency_to);
+            $rate_currency = $currency_to;
+        }
+        $currency_symbol = Util::getCurrencySimbol($rate_currency);
+        $country_code = ($currency_symbol === "$")
+                ? $rate_currency{0} . $rate_currency{1} : '';
+        return [
+                'rate' => $rate,
+                'currency_symbol' => $currency_symbol,
+                'country_code' => $country_code
+            ];
+    }
+    
+    function getPeakRateDisplayData($villa_node_id, $calendar_id = '') 
+    {
+        Object::loadFiles('Model', ['Calendar', 'DrupalRatePeak']);
+        $DrupalRatePeakModel = new DrupalRatePeakModel();
+        
+        $rate = 0;
+        $rate_currency = 'USD';
+        if ((int)$calendar_id > 0) {
+            $CalendarModel = new CalendarModel();
+            $opts = array();
+            $opts['calendar_id'] = $calendar_id;
+            $villa_node_id = $CalendarModel->get($calendar_id)['villa_node_id'];
+        }
+        if ((int)$villa_node_id > 0) {
+            $rate_usd = (float)$DrupalRatePeakModel->get($villa_node_id)['field_rate_peak_value'];
+            $currency_to = !empty($_SESSION['currency'])
+                    ? $_SESSION['currency'] : 'USD';
+            $rate = Util::formatMoney(
+                    Util::currencyConverter('USD', $currency_to, $rate_usd),
+                    $currency_to);
+            $rate_currency = $currency_to;
+        }
+        $currency_symbol = Util::getCurrencySimbol($rate_currency);
+        $country_code = ($currency_symbol === "$")
+                ? $rate_currency{0} . $rate_currency{1} : '';
+        return [
+                'rate' => $rate,
+                'currency_symbol' => $currency_symbol,
+                'country_code' => $country_code
+            ];
+    }
+    
+    function rate_display() 
     {
         header("content-type: application/javascript");
         $villa_node_id = $_GET['vnid'];
-        $low_rate_data = $this->getLowRateDisplayData($villa_node_id);
+        $rate_type = $_GET['type'];
+        if ($rate_type === 'low') {
+            $rate_data = $this->getLowRateDisplayData($villa_node_id);
+        } elseif ($rate_type === 'high') {
+            $rate_data = $this->getHighRateDisplayData($villa_node_id);
+        } elseif ($rate_type === 'peak') {
+            $rate_data = $this->getPeakRateDisplayData($villa_node_id);
+        }
         $this->tpl = [
-            'rate_low' => $low_rate_data['rate_low'],
-            'currency_symbol' => $low_rate_data['currency_symbol'],
-            'country_code' => $low_rate_data['country_code'],
-            'villa_node_id' => $villa_node_id
+            'rate' => $rate_data['rate'],
+            'currency_symbol' => $rate_data['currency_symbol'],
+            'country_code' => $rate_data['country_code'],
+            'villa_node_id' => $villa_node_id,
+            'rate_type' => $rate_type
         ];
     }
     
@@ -834,10 +906,18 @@ class GzFront extends App {
     function convertCurrency()
     {
         $this->isAjax = true;
-        $low_rate_data = $this->getLowRateDisplayData($_GET['vnid']);
-        $result['rate_low'] = $low_rate_data['rate_low'];
-        $result['currency_symbol'] = $low_rate_data['currency_symbol'];
-        $result['country_code'] = $low_rate_data['country_code'];
+        $villa_node_id = $_GET['vnid'];
+        $rate_type = $_GET['type'];
+        if ($rate_type === 'low') {
+            $rate_data = $this->getLowRateDisplayData($villa_node_id);
+        } elseif ($rate_type === 'high') {
+            $rate_data = $this->getHighRateDisplayData($villa_node_id);
+        } elseif ($rate_type === 'peak') {
+            $rate_data = $this->getPeakRateDisplayData($villa_node_id);
+        }
+        $result['rate'] = $rate_data['rate'];
+        $result['currency_symbol'] = $rate_data['currency_symbol'];
+        $result['country_code'] = $rate_data['country_code'];
         header("Content-Type: application/json", true);
         echo json_encode($result);
     }

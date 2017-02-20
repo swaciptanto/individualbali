@@ -807,26 +807,28 @@ var gz$ = jQuery.noConflict();
             } else {
                 var frm = gz$('#webform-client-form');
             }
-            $(".title-low-rate").each(function() {
-                var element_low_rate = $(this);
-                var villa_node_id = element_low_rate.find(":hidden").val();
+            $(".title-rate").each(function() {
+                var element_rate = $(this);
+                var villa_node_id = element_rate.find(".villa-node-id").val();
+                var rate_type = element_rate.find(".rate-type").val();
                 $.ajax({
                     type: "POST",
                     dataType: 'json',
                     data: frm.serialize(),
                     url: self.options.server
                             + "index.php?controller=GzFront&action=convertCurrency"
-                            + "&vnid=" + villa_node_id,
+                            + "&vnid=" + villa_node_id
+                            + "&type=" + rate_type,
                     success: function (res) {
-                        var title_low_rate = '';
+                        var title_rate = '';
                         var country_code = res.country_code;
                         var currency_symbol = res.currency_symbol;
-                        var rate_low = res.rate_low;
+                        var rate = res.rate;
                         if (country_code !== '') {
-                            title_low_rate = country_code + ' ';
+                            title_rate = country_code + ' ';
                         }
-                        title_low_rate += currency_symbol + ' ' + rate_low;
-                        element_low_rate.find("span").html(title_low_rate);
+                        title_rate += currency_symbol + ' ' + rate;
+                        element_rate.find("span").html(title_rate);
                     }
                 });
             });
