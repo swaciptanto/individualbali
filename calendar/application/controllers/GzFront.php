@@ -65,31 +65,29 @@ class GzFront extends App {
      */
     function beforeRender() {
         //rate display not need supplied with css and js
+        //die($_REQUEST['action'])
         if ($_REQUEST['action'] != 'rate_display') {
             //load css
-            if ($_REQUEST['action'] != 'currency_display') {
-                if ($_REQUEST['action'] == 'inquiry_form') {
-                    $this->css[] = array('file' => 'front/bootstrap.min.css', 'path' => CSS_PATH);
-                    $this->css[] = array('file' => 'front/inquiry_form.css', 'path' => CSS_PATH);
-                    $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
-                    $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
-                } elseif($_REQUEST['action'] != 'modal_form') {
-                    $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
-                    $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
-                    $this->css[] = array('file' => 'gzadmin/plugins/lada/ladda-themeless.min.css', 'path' => JS_PATH);
-                    $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/tooltipster.css', 'path' => JS_PATH);
-                    $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/themes/tooltipster-light.css', 'path' => JS_PATH);
-                    $this->css[] = array('file' => 'gzadmin/plugins/lada/prism.css', 'path' => JS_PATH);
-                }
-                foreach ($_GET['cid'] as $cid) {
-                    $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
-                }
+            if ($_REQUEST['action'] == 'inquiry_form') {
+                $this->css[] = array('file' => 'front/bootstrap.min.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/inquiry_form.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
+            } elseif($_REQUEST['action'] != 'modal_form') {
+                $this->css[] = array('file' => 'front/style.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'front/gz-production.css', 'path' => CSS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/lada/ladda-themeless.min.css', 'path' => JS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/tooltipster.css', 'path' => JS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/themes/tooltipster-light.css', 'path' => JS_PATH);
+                $this->css[] = array('file' => 'gzadmin/plugins/lada/prism.css', 'path' => JS_PATH);
             }
-
+            foreach ($_GET['cid'] as $cid) {
+                $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
+            }
             //load js
             $this->js[] = array('file' => 'jquery-2.0.2.min.js', 'path' => LIBS_PATH);
             $this->js[] = array('file' => 'jquery-ui.js', 'path' => LIBS_PATH);
-            if ($_REQUEST['action'] == 'inquiry_form' || $_REQUEST['action'] == 'currency_display') {
+            if ($_REQUEST['action'] == 'inquiry_form') {
                 //$this->js[] = array('file' => 'gzadmin/bootstrap-3.3.5.min.js', 'path' => JS_PATH);
                 $this->js[] = array('file' => 'gzadmin/plugins/jquery-validation-1.14.0/jquery.validate-1.14.0.min.js', 'path' => JS_PATH);
                 $this->js[] = array('file' => 'gzadmin/plugins/bootstrap-tooltip/jquery-validate.bootstrap-tooltip.min.js', 'path' => JS_PATH);
@@ -99,6 +97,8 @@ class GzFront extends App {
                 $this->js[] = array('file' => 'gzadmin/plugins/tooltipster/js/jquery.tooltipster.min.js', 'path' => JS_PATH);
                 $this->js[] = array('file' => 'jquery/jquery-validation-1.13.0/dist/jquery.validate.min.js', 'path' => LIBS_PATH);
                 $this->js[] = array('file' => 'load.js', 'path' => JS_PATH);
+            } elseif ($_REQUEST['action'] == 'currency_display') {
+                $this->js[] = array('file' => 'GzFront.js', 'path' => JS_PATH);
             } elseif ($_REQUEST['action'] != 'modal_form'){
                 $this->js[] = array('file' => 'jquery/jquery-validation-1.13.0/dist/jquery.validate.min.js', 'path' => LIBS_PATH);
             }
@@ -238,20 +238,26 @@ class GzFront extends App {
     function inquiry_form() {
         header("content-type: application/javascript");
         
-        Object::loadFiles('Model', ['Option', 'Calendar', 'DrupalICalURL']);
+        Object::loadFiles('Model', ['Option', 'Calendar', 'DrupalICalURL', 'DrupalURLAlias']);
         $OptionModel = new OptionModel();
         $CalendarModel = new CalendarModel();
         $DrupalICalURLModel = new DrupalICalURLModel();
+        $DrupalURLAliasModel = new DrupalURLAliasModel();
 
         foreach ($_GET['cid'] as $cid) {
             $opts = array();
             $cal_id = $cid;
             $villa_node_id = $CalendarModel->get($cid)['villa_node_id'];
             $ical_url = '';
+            $page_villa_url = '';
             if ((int)$villa_node_id > 0) {
                 $ical_url = $DrupalICalURLModel->get($villa_node_id)['field_ical_url_value'];
+                $villa_uri = $DrupalURLAliasModel->get("node/$villa_node_id")['alias'];
+                $page_villa_url = (isset($_SERVER['HTTPS']) ? "https" : "http")
+                    . "://$_SERVER[HTTP_HOST]/$villa_uri";
             }
             $this->tpl['ical_url'][$cid] = $ical_url;
+            $this->tpl['page_villa_url'][$cid] = $page_villa_url;
             $opts['calendar_id'] = $cid;
             $this->tpl['option_arr_values'][$cid] = $OptionModel->getAllPairValues($opts);
         }
@@ -270,10 +276,9 @@ class GzFront extends App {
     function currency_display()
     {
         header("content-type: application/javascript");
-        $this->tpl['calendar_id'] = $_GET['cid'];
     }
     
-    function getLowRateDisplayData($villa_node_id, $calendar_id = '') 
+    function getLowRateDisplayData($villa_node_id, $calendar_id = '', $decimal_point = 2) 
     {
         Object::loadFiles('Model', ['Calendar', 'DrupalRateLow']);
         $DrupalRateLowModel = new DrupalRateLowModel();
@@ -292,7 +297,8 @@ class GzFront extends App {
                     ? $_SESSION['currency'] : 'USD';
             $rate = Util::formatMoney(
                     Util::currencyConverter('USD', $currency_to, $rate_usd),
-                    $currency_to);
+                    $currency_to,
+                    $decimal_point);
             $rate_currency = $currency_to;
         }
         $currency_symbol = Util::getCurrencySimbol($rate_currency);
@@ -305,7 +311,7 @@ class GzFront extends App {
             ];
     }
     
-    function getHighRateDisplayData($villa_node_id, $calendar_id = '') 
+    function getHighRateDisplayData($villa_node_id, $calendar_id = '', $decimal_point = 2) 
     {
         Object::loadFiles('Model', ['Calendar', 'DrupalRateHigh']);
         $DrupalRateHighModel = new DrupalRateHighModel();
@@ -324,7 +330,8 @@ class GzFront extends App {
                     ? $_SESSION['currency'] : 'USD';
             $rate = Util::formatMoney(
                     Util::currencyConverter('USD', $currency_to, $rate_usd),
-                    $currency_to);
+                    $currency_to,
+                    $decimal_point);
             $rate_currency = $currency_to;
         }
         $currency_symbol = Util::getCurrencySimbol($rate_currency);
@@ -337,7 +344,7 @@ class GzFront extends App {
             ];
     }
     
-    function getPeakRateDisplayData($villa_node_id, $calendar_id = '') 
+    function getPeakRateDisplayData($villa_node_id, $calendar_id = '', $decimal_point = 2) 
     {
         Object::loadFiles('Model', ['Calendar', 'DrupalRatePeak']);
         $DrupalRatePeakModel = new DrupalRatePeakModel();
@@ -356,7 +363,8 @@ class GzFront extends App {
                     ? $_SESSION['currency'] : 'USD';
             $rate = Util::formatMoney(
                     Util::currencyConverter('USD', $currency_to, $rate_usd),
-                    $currency_to);
+                    $currency_to,
+                    $decimal_point);
             $rate_currency = $currency_to;
         }
         $currency_symbol = Util::getCurrencySimbol($rate_currency);
@@ -375,11 +383,11 @@ class GzFront extends App {
         $villa_node_id = $_GET['vnid'];
         $rate_type = $_GET['type'];
         if ($rate_type === 'low') {
-            $rate_data = $this->getLowRateDisplayData($villa_node_id);
+            $rate_data = $this->getLowRateDisplayData($villa_node_id, '', 0);
         } elseif ($rate_type === 'high') {
-            $rate_data = $this->getHighRateDisplayData($villa_node_id);
+            $rate_data = $this->getHighRateDisplayData($villa_node_id, '', 0);
         } elseif ($rate_type === 'peak') {
-            $rate_data = $this->getPeakRateDisplayData($villa_node_id);
+            $rate_data = $this->getPeakRateDisplayData($villa_node_id, '', 0);
         }
         $this->tpl = [
             'rate' => $rate_data['rate'],
@@ -909,11 +917,11 @@ class GzFront extends App {
         $villa_node_id = $_GET['vnid'];
         $rate_type = $_GET['type'];
         if ($rate_type === 'low') {
-            $rate_data = $this->getLowRateDisplayData($villa_node_id);
+            $rate_data = $this->getLowRateDisplayData($villa_node_id, '' , 0);
         } elseif ($rate_type === 'high') {
-            $rate_data = $this->getHighRateDisplayData($villa_node_id);
+            $rate_data = $this->getHighRateDisplayData($villa_node_id, '' , 0);
         } elseif ($rate_type === 'peak') {
-            $rate_data = $this->getPeakRateDisplayData($villa_node_id);
+            $rate_data = $this->getPeakRateDisplayData($villa_node_id, '' , 0);
         }
         $result['rate'] = $rate_data['rate'];
         $result['currency_symbol'] = $rate_data['currency_symbol'];
@@ -935,7 +943,7 @@ class GzFront extends App {
         }
         
         $_POST['calendar_id'] = $_GET['cid'];
-        $price = $this->calculateBookingPrice($_POST);
+        $price = $this->calculateBookingPrice($_POST, 0);
         
         $nights = ceil(($_POST['to_date'] - $_POST['from_date']) / 86400);
         $price['formated_total'] = $price['formated_total'] . ' / ' . $nights . ' nights';

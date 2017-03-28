@@ -312,20 +312,27 @@
                 </p>
             </div>
         </div>
+        <?php 
+            $url_villa = $tpl['page_villa_url'][$cid];
+            $via = 'individualbali';
+            $url_facebook = "https://www.facebook.com/sharer/sharer.php?u=$url_villa";
+            $url_twitter= "https://twitter.com/intent/tweet?text=&url=$url_villa&via=$via";
+            $url_google_plus = "https://plus.google.com/share?url=$url_villa";
+        ?>
         <div class="share">
             <ul class="list-unstyled row">
                 <li class="col-xs-4">
-                    <a class="share-btn facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://www.individualbali.com/villas/verve-villa-lombok" target="_blank">
+                    <a class="share-btn facebook" href="<?php echo $url_facebook; ?>" target="_blank">
                         <i class="fa fa-facebook"></i>
                     </a>
                 </li>
                 <li class="col-xs-4">
-                    <a class="share-btn twitter" href="https://twitter.com/intent/tweet?text=&url=http://www.individualbali.com/villas/verve-villa-lombok&via=individualbali" target="_blank">
+                    <a class="share-btn twitter" href="<?php echo $url_twitter; ?>" target="_blank">
                         <i class="fa fa-twitter"></i>
                     </a>
                 </li>
                 <li class="col-xs-4">
-                    <a class="share-btn google-plus" href="https://plus.google.com/share?url=http://www.individualbali.com/villas/verve-villa-lombok" target="_blank">
+                    <a class="share-btn google-plus" href="<?php echo $url_google_plus; ?>" target="_blank">
                         <i class="fa fa-google-plus"></i>
                     </a>
                 </li>

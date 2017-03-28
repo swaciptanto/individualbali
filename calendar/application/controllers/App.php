@@ -88,7 +88,7 @@ class App extends Controller {
         return $this->getRoleId() == 2;
     }
 
-    function calculateBookingPrice($params) {
+    function calculateBookingPrice($params, $decimal_point = 2) {
         //modified: add new model
         Object::loadFiles('Model', array('Price', 'Calendar', 'Extra', 'Option', 'Discount', 'DrupalRateTax'));
         $PriceModel = new PriceModel();
@@ -108,13 +108,13 @@ class App extends Controller {
             'tax' => 0,
             'security' => 0,
             'deposit' => 0,
-            'formated_calendars_price' => Util::currencyFormat($option_arr['currency'], 0),
-            'formated_extra_price' => Util::currencyFormat($option_arr['currency'], 0),
-            'formated_discount' => Util::currencyFormat($option_arr['currency'], 0),
-            'formated_total' => Util::currencyFormat($option_arr['currency'], 0),
-            'formated_tax' => Util::currencyFormat($option_arr['currency'], 0),
-            'formated_security' => Util::currencyFormat($option_arr['currency'], 0),
-            'formated_deposit' => Util::currencyFormat($option_arr['currency'], 0)
+            'formated_calendars_price' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point),
+            'formated_extra_price' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point),
+            'formated_discount' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point),
+            'formated_total' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point),
+            'formated_tax' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point),
+            'formated_security' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point),
+            'formated_deposit' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point)
             );
 
         if (empty($params['calendar_id']) || empty($params['to_date']) || empty($params['from_date'])) {
@@ -321,13 +321,13 @@ class App extends Controller {
                         break;
                 }
             }
-            $result['formated_discount'] = Util::currencyFormat($option_arr['currency'], $result['discount']);
-            $result['formated_extra_price'] = Util::currencyFormat($option_arr['currency'], $result['extra_price']);
-            $result['formated_deposit'] = Util::currencyFormat($option_arr['currency'], $result['deposit']);
-            $result['formated_total'] = Util::currencyFormat($option_arr['currency'], $result['total']);
-            $result['formated_total_with_tax'] = Util::currencyFormat($option_arr['currency'], $result['total_with_tax']);
-            $result['formated_calendars_price'] = Util::currencyFormat($option_arr['currency'], $result['calendars_price']);
-            $result['formated_tax'] = Util::currencyFormat($option_arr['currency'], $result['tax']);
+            $result['formated_discount'] = Util::currencyFormat($option_arr['currency'], $result['discount'], $decimal_point);
+            $result['formated_extra_price'] = Util::currencyFormat($option_arr['currency'], $result['extra_price'], $decimal_point);
+            $result['formated_deposit'] = Util::currencyFormat($option_arr['currency'], $result['deposit'], $decimal_point);
+            $result['formated_total'] = Util::currencyFormat($option_arr['currency'], $result['total'], $decimal_point);
+            $result['formated_total_with_tax'] = Util::currencyFormat($option_arr['currency'], $result['total_with_tax'], $decimal_point);
+            $result['formated_calendars_price'] = Util::currencyFormat($option_arr['currency'], $result['calendars_price'], $decimal_point);
+            $result['formated_tax'] = Util::currencyFormat($option_arr['currency'], $result['tax'], $decimal_point);
         }
         return $result;
     }

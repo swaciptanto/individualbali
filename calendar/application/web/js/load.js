@@ -166,28 +166,29 @@ var gz$ = jQuery.noConflict();
                 gz$(document).delegate(".btn-inquiry", "click", function (e) {
                     e.preventDefault();
                     self.sendInquiryForm.call(self, this);
-                }).delegate("#currencies-value-id, #currencies-value-id-modal, #currencies-selector", "change", function (e) {
-                    if ($(this).prop("id") === "currencies-selector") {
-                        if ($(".btn-booking").is(":visible")) {
-                            $("#currencies-value-id-modal").val($(this).val());
-                        } else {
-                            $("#currencies-value-id").val($(this).val());
+                }).delegate("#currencies-value-id, #currencies-value-id-modal, .ddl-currencies-selector", "change", function (e) {
+                    if ($(".btn-inquiry").length > 0) {
+                        if ($(this).hasClass("ddl-currencies-selector")) {
+                            if ($(".btn-booking").is(":visible")) {
+                                $("#currencies-value-id-modal").val($(this).val());
+                            } else {
+                                $("#currencies-value-id").val($(this).val());
+                            }
                         }
+                        var currency = gz$(this).val();
+                        gz$.ajax({
+                            type: "POST",
+                            data: {
+                                currencies: currency
+                            },
+                            url: self.options.server + "load.php?controller=GzFront&action=changeCurrancy&cid=" + self.options.cal_id,
+                            success: function (res) {
+                                self.calculateInquiryFormPrice.call(self, this);
+                                self.ABCCalendar.call(self, this);
+                                convertCurrency();
+                            }
+                        });
                     }
-                    var currancy = gz$(this).val();
-
-                    gz$.ajax({
-                        type: "POST",
-                        data: {
-                            currencies: currancy
-                        },
-                        url: self.options.server + "load.php?controller=GzFront&action=changeCurrancy&cid=" + self.options.cal_id,
-                        success: function (res) {
-                            self.calculateInquiryFormPrice.call(self, this);
-                            self.ABCCalendar.call(self, this);
-                            self.convertCurrency.call(self, this);
-                        }
-                    });
                 });
             }
             this.$gzCalContainer.delegate("#back_to_calendar_id", "click", function (e) {
@@ -797,40 +798,6 @@ var gz$ = jQuery.noConflict();
                         gz$("#total").html(json.formated_total);
                     }
                 }
-            });
-        },
-        convertCurrency: function () {
-            var self = this;
-            var $screen = gz$(document).width();
-            if ($screen <= 991) {
-                var frm = gz$('#modal-webform-client-form');
-            } else {
-                var frm = gz$('#webform-client-form');
-            }
-            $(".title-rate").each(function() {
-                var element_rate = $(this);
-                var villa_node_id = element_rate.find(".villa-node-id").val();
-                var rate_type = element_rate.find(".rate-type").val();
-                $.ajax({
-                    type: "POST",
-                    dataType: 'json',
-                    data: frm.serialize(),
-                    url: self.options.server
-                            + "index.php?controller=GzFront&action=convertCurrency"
-                            + "&vnid=" + villa_node_id
-                            + "&type=" + rate_type,
-                    success: function (res) {
-                        var title_rate = '';
-                        var country_code = res.country_code;
-                        var currency_symbol = res.currency_symbol;
-                        var rate = res.rate;
-                        if (country_code !== '') {
-                            title_rate = country_code + ' ';
-                        }
-                        title_rate += currency_symbol + ' ' + rate;
-                        element_rate.find("span").html(title_rate);
-                    }
-                });
             });
         }
     }
