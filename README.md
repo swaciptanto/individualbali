@@ -1,2 +1,2 @@
 # individualbali
-Individual Bali Hospitality web page
+Individual Bali Hospitality Booking Calendar
