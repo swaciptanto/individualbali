@@ -380,21 +380,42 @@ class GzFront extends App {
     function rate_display() 
     {
         header("content-type: application/javascript");
-        $villa_node_id = $_GET['vnid'];
-        $rate_type = $_GET['type'];
-        if ($rate_type === 'low') {
-            $rate_data = $this->getLowRateDisplayData($villa_node_id, '', 0);
-        } elseif ($rate_type === 'high') {
-            $rate_data = $this->getHighRateDisplayData($villa_node_id, '', 0);
-        } elseif ($rate_type === 'peak') {
-            $rate_data = $this->getPeakRateDisplayData($villa_node_id, '', 0);
+        $rate = '';
+        $villa_node_id = '';
+        $rate_type = '';
+        $currency_symbol = '';
+        $country_code = '';
+        $default_currency = '';
+        $default_rate = '';
+        if (isset($_GET['vnid']) && isset($_GET['type'])) {
+            $villa_node_id = $_GET['vnid'];
+            $rate_type = $_GET['type'];
+            if ($rate_type === 'low') {
+                $rate_data = $this->getLowRateDisplayData($villa_node_id, '', 0);
+            } elseif ($rate_type === 'high') {
+                $rate_data = $this->getHighRateDisplayData($villa_node_id, '', 0);
+            } elseif ($rate_type === 'peak') {
+                $rate_data = $this->getPeakRateDisplayData($villa_node_id, '', 0);
+            }
+            $currency_symbol = $rate_data['currency_symbol'];
+            $country_code = $rate_data['country_code'];
+            $rate = $rate_data['rate'];
+        } elseif (isset($_GET['defaultrate']) && isset($_GET['defaultcurrency'])) {
+            $default_rate = $_GET['defaultrate'];
+            $default_currency = $_GET['defaultcurrency'];
+            $rate = $default_rate;
+            $currency_symbol = Util::getCurrencySimbol($default_currency);
+            $country_code = ($currency_symbol === "$")
+                ? $default_currency{0} . $default_currency{1} : '';
         }
         $this->tpl = [
-            'rate' => $rate_data['rate'],
-            'currency_symbol' => $rate_data['currency_symbol'],
-            'country_code' => $rate_data['country_code'],
+            'rate' => $rate,
+            'currency_symbol' => $currency_symbol,
+            'country_code' => $country_code,
             'villa_node_id' => $villa_node_id,
-            'rate_type' => $rate_type
+            'rate_type' => $rate_type,
+            'default_currency' => $default_currency,
+            'default_rate' => $default_rate
         ];
     }
     
@@ -914,18 +935,38 @@ class GzFront extends App {
     function convertCurrency()
     {
         $this->isAjax = true;
-        $villa_node_id = $_GET['vnid'];
-        $rate_type = $_GET['type'];
-        if ($rate_type === 'low') {
-            $rate_data = $this->getLowRateDisplayData($villa_node_id, '' , 0);
-        } elseif ($rate_type === 'high') {
-            $rate_data = $this->getHighRateDisplayData($villa_node_id, '' , 0);
-        } elseif ($rate_type === 'peak') {
-            $rate_data = $this->getPeakRateDisplayData($villa_node_id, '' , 0);
+        $rate = '';
+        $currency_symbol = '';
+        $country_code = '';
+        if (isset($_GET['vnid']) && isset($_GET['type'])) {
+            $villa_node_id = $_GET['vnid'];
+            $rate_type = $_GET['type'];
+            if ($rate_type === 'low') {
+                $rate_data = $this->getLowRateDisplayData($villa_node_id, '' , 0);
+            } elseif ($rate_type === 'high') {
+                $rate_data = $this->getHighRateDisplayData($villa_node_id, '' , 0);
+            } elseif ($rate_type === 'peak') {
+                $rate_data = $this->getPeakRateDisplayData($villa_node_id, '' , 0);
+            }
+            $rate = $rate_data['rate'];
+            $currency_symbol = $rate_data['currency_symbol'];
+            $country_code = $rate_data['country_code'];
+        } elseif (isset($_GET['defaultcurrency']) && isset($_GET['defaultrate'])) {
+            $default_currency = $_GET['defaultcurrency'];
+            $default_rate = $_GET['defaultrate'];
+            $currency_to = !empty($_SESSION['currency'])
+                    ? $_SESSION['currency'] : 'USD';
+            $currency_symbol = Util::getCurrencySimbol($currency_to);
+            $country_code = ($currency_symbol === "$")
+                ? $currency_to{0} . $currency_to{1} : '';
+            $rate = Util::formatMoney(
+                Util::currencyConverter($default_currency, $currency_to, $default_rate),
+                $currency_to,
+                0);
         }
-        $result['rate'] = $rate_data['rate'];
-        $result['currency_symbol'] = $rate_data['currency_symbol'];
-        $result['country_code'] = $rate_data['country_code'];
+        $result['rate'] = $rate;
+        $result['currency_symbol'] = $currency_symbol;
+        $result['country_code'] = $country_code;
         header("Content-Type: application/json", true);
         echo json_encode($result);
     }
@@ -1074,7 +1115,6 @@ class GzFront extends App {
     
     function changeCurrancy(){
          $this->isAjax = true;
-         
          $this->setcurrency($_POST['currencies']);
          $this->tpl['currencies_select'] = $this->getcurrency();
     }
