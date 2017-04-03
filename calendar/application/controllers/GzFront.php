@@ -403,10 +403,19 @@ class GzFront extends App {
         } elseif (isset($_GET['defaultrate']) && isset($_GET['defaultcurrency'])) {
             $default_rate = $_GET['defaultrate'];
             $default_currency = $_GET['defaultcurrency'];
-            $rate = $default_rate;
-            $currency_symbol = Util::getCurrencySimbol($default_currency);
+            $currency_to = !empty($_SESSION['currency'])
+                    ? $_SESSION['currency'] : $default_currency;
+            $currency_symbol = Util::getCurrencySimbol($currency_to);
             $country_code = ($currency_symbol === "$")
-                ? $default_currency{0} . $default_currency{1} : '';
+                ? $currency_to{0} . $currency_to{1} : '';
+            if ($default_currency === $currency_to) {
+                $rate = $default_rate;
+            } else {
+                $rate = Util::formatMoney(
+                    Util::currencyConverter($default_currency, $currency_to, $default_rate),
+                    $currency_to,
+                    0);
+            }
         }
         $this->tpl = [
             'rate' => $rate,

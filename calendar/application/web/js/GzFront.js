@@ -38,7 +38,7 @@ function convertCurrency() {
 }
 $(".ddl-currencies-selector").unbind('change').bind('change', function()
 {
-    if ($(".btn-inquiry").length === 0 && $(this).is(":visible")) {
+    if ($(this).is(":visible") && $(".gzABCalendarTable").length === 0) {
         var currency = $(this).val();
         $.ajax({
             type: "POST",
