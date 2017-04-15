@@ -252,12 +252,13 @@ var gz$ = jQuery.noConflict();
         },
         bindModalDatePicker: function (e) {
             var self = this;
-
+            var dateToday = new Date();
             gz$('#modal-startdate').datepicker({
                 firstDay: gz$('#modal-startdate').attr('first-day'),
                 dateFormat: gz$('#modal-startdate').attr('data-format'),
                 prevText: '<i class="fa fa-chevron-left"></i>',
                 nextText: '<i class="fa fa-chevron-right"></i>',
+                minDate: dateToday,
                 beforeShowDay: function (date) {
                     var string = jQuery.datepicker.formatDate(gz$('#modal-startdate').attr('data-format'), date);
                     return [self.options.bookedDate.indexOf(string) == -1]
