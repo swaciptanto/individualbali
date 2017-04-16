@@ -53,12 +53,12 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                     <input id="last" class="form-control input-sm" type="text" name="last" size="25" value="<?php echo $tpl['arr']['last']; ?>" title="<?php echo __('last'); ?>">
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="passowrd"><?php echo __('passowrd'); ?>:</label>
-                    <input id="passowrd" class="form-control input-sm" type="password" name="passowrd" size="25" value="" title="<?php echo __('passowrd'); ?>">
+                    <label class="control-label" for="password"><?php echo __('password'); ?>:</label>
+                    <input id="password" class="form-control input-sm" type="password" name="password" size="25" value="" title="<?php echo __('password'); ?>">
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="confirm_passowrd"><?php echo __('confirm_passowrd'); ?>:</label>
-                    <input id="confirm_passowrd" class="form-control input-sm" type="password" name="confirm_passowrd" size="25" value="" title="<?php echo __('confirm_passowrd'); ?>" >
+                    <label class="control-label" for="confirm_password"><?php echo __('confirm_password'); ?>:</label>
+                    <input id="confirm_password" class="form-control input-sm" type="password" name="confirm_password" size="25" value="" title="<?php echo __('confirm_password'); ?>" >
                 </div>
                 <div class="form-group" id="img-file-id">
                     <?php if (is_file(INSTALL_PATH . UPLOAD_PATH . 'avatar/thumb/' . $tpl['arr']['avatar'])) { ?>
