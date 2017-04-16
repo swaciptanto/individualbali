@@ -47,9 +47,10 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzCalendar' && @$_REQUEST['action'] == 'index') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCalendar/index"><i class="fa    fa-caret-right"></i><?php echo __('all_calendars'); ?></a></li>
-                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzCalendar' && @$_REQUEST['action'] == 'create') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCalendar/create"><i class="fa    fa-caret-right"></i><?php echo __('add_calendars'); ?></a></li>
-                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzCalendar' && @$_REQUEST['action'] == 'block') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCalendar/block"><i class="fa    fa-caret-right"></i><?php echo __('calendar_blocking'); ?></a></li>
+                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzCalendar' && @$_REQUEST['action'] == 'index') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCalendar/index"><i class="fa fa-caret-right"></i><?php echo __('all_calendars'); ?></a></li>
+                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzCalendar' && @$_REQUEST['action'] == 'create') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCalendar/create"><i class="fa fa-caret-right"></i><?php echo __('add_calendars'); ?></a></li>
+                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzCalendar' && @$_REQUEST['action'] == 'block') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCalendar/block"><i class="fa fa-caret-right"></i><?php echo __('calendar_blocking'); ?></a></li>
+                        <li class="<?php echo (@$_REQUEST['controller'] == 'GzCalendar' && @$_REQUEST['action'] == 'settings') ? "active" : ""; ?>"><a href="<?php echo INSTALL_URL; ?>GzCalendar/settings/2"><i class="fa fa-caret-right"></i><?php echo __('default_calendar_settings'); ?></a></li>
                     </ul>
                 </li>
             <?php } ?>

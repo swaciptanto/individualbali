@@ -74,7 +74,12 @@ class GzCalendar extends App {
         $CalendarModel = new CalendarModel();
         $CalendarGalleryModel = new CalendarGalleryModel();
 
-        $opts = array();
+        /* 
+         * hide Default Calendar (to avoid it deleted by user)
+         * this Default Calender could accessed via side menu..
+         * .. Calendars > Default Calendar Settings
+         */
+        $opts = [$CalendarModel->getTable() . '.id != ?' => DEFAULT_CALENDAR_ID];
 
         $arr = $CalendarModel->getI18nAll($opts);
         $result = array();
@@ -627,26 +632,42 @@ class GzCalendar extends App {
 
         Object::loadFiles('Model', array('Option'));
         $OptionModel = new OptionModel();
-
+        
         if (isset($_POST['update_option'])) {
-
             $_arr = $OptionModel->getAll();
             $options = array();
-
             foreach ($_arr as $key => $value) {
                 $options[$value['key']] = $value;
             }
+            $key_email_template = [
+                'client_inquiry_form',
+                'client_inquiry_form_subject',
+                'owner_inquiry_form',
+                'owner_inquiry_form_subject',
+            ];
 
             foreach ($_POST as $key => $value) {
-
                 if (array_key_exists($key, $options)) {
                     $sql_value = $OptionModel->escape($value, null, $options[$key]['type']);
 
-                    $query = "UPDATE `" . $OptionModel->getTable() . "` SET `value` = '$sql_value' WHERE `key` = '$key' AND `calendar_id` = '" . $_GET['id'] . "' LIMIT 1";
+                    /*
+                     * if default calendar email template changed, update also..
+                     * ..all other calendar email template
+                     */
+                    if ((int)$_GET['id'] === DEFAULT_CALENDAR_ID
+                            && in_array($key, $key_email_template)) {
+                        $query = "UPDATE `" . $OptionModel->getTable()
+                                . "` SET `value` = '$sql_value' WHERE"
+                                . " `key` = '$key' AND `calendar_id` > 0";
+                    } else {
+                        $query = "UPDATE `" . $OptionModel->getTable()
+                                . "` SET `value` = '$sql_value' WHERE"
+                                . " `key` = '$key' AND"
+                                . " `calendar_id` = '" . $_GET['id'] . "'"
+                                . " LIMIT 1";
+                    }
                     $pdo = $OptionModel->getPdo();
-
                     $stmt = $pdo->prepare($query);
-
                     $stmt->execute();
                     $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }

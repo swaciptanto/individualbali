@@ -24,6 +24,7 @@ if (!$stop) {
     define("DEFAULT_PASS", "");
     define("DEFAULT_DB", "individualbali_calendar");
     define("DEFAULT_PREFIX", "");
+    define("DEFAULT_CALENDAR_ID", 2);
 
     if (preg_match('/\[hostname\]/', DEFAULT_HOST) || preg_match('/\[username\]/', DEFAULT_USER)) {
         Util::redirect("index.php?controller=Installer&action=step0&install=1");

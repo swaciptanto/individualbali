@@ -1,6 +1,7 @@
 <section class="content-header">
     <h1>
-        <?php echo __('settings'); ?>
+        <?php echo ((int)$_GET['id'] === DEFAULT_CALENDAR_ID
+                ? __('default_calendar_settings') : __('settings')); ?>
     </h1>
     <ol class="breadcrumb">
         <li><a href="<?php echo INSTALL_URL; ?>"><i class="fa fa-dashboard"></i> <?php echo __('home'); ?></a></li>
@@ -21,8 +22,7 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                 <li class="">
                     <a data-toggle="tab" href="#tab_2"><?php echo __('menu_appearance'); ?></a>
                 </li>
-<!--            modified: hide    
-                <li class="">
+<!--                <li class="">
                     <a data-toggle="tab" href="#tab_3"><?php echo __('menu_booking'); ?></a>
                 </li>
                 <li class="">
@@ -31,12 +31,12 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                 <li class="">
                     <a data-toggle="tab" href="#tab_5"><?php echo __('menu_email'); ?></a>
                 </li>
-                <li class="">
+<!--                <li class="">
                     <a data-toggle="tab" href="#tab_6"><?php echo __('menu_terms'); ?></a>
                 </li>
                 <li class="">
                     <a data-toggle="tab" href="#tab_7"><?php echo __('menu_invoice'); ?></a>
-                </li>
+                </li>-->
             </ul>    
             <div class="tab-content">
                 <div id="tab_1" class="tab-pane active">
@@ -53,7 +53,7 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                         <button id="submit" class="btn btn-primary" autocomplete="off" value="Submit" name="submit" tabindex="9" type="submit"><i class="fa fa-fw fa-save"></i>&nbsp;&nbsp;<?php echo __('save'); ?></button>
                     </fieldset>
                 </div>
-                <div id="tab_3" class="tab-pane">
+<!--                <div id="tab_3" class="tab-pane">
                     <fieldset>
                         <?php require 'settings/booking.php'; ?>
                         <input type="hidden" name="update_option" value="1" />
@@ -64,13 +64,13 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                     <?php require 'settings/payment.php'; ?>
                     <input type="hidden" name="update_option" value="1" />
                     <button id="submit" class="btn btn-primary" autocomplete="off" value="Submit" name="submit" tabindex="9" type="submit"><i class="fa fa-fw fa-save"></i>&nbsp;&nbsp;<?php echo __('save'); ?></button>
-                </div>
+                </div>-->
                 <div id="tab_5" class="tab-pane">
                     <?php require 'settings/emails.php'; ?>
                     <input type="hidden" name="update_option" value="1" />
                     <button id="submit" class="btn btn-primary" autocomplete="off" value="Submit" name="submit" tabindex="9" type="submit"><i class="fa fa-fw fa-save"></i>&nbsp;&nbsp;<?php echo __('save'); ?></button>
                 </div>
-                <div id="tab_6" class="tab-pane">
+<!--                <div id="tab_6" class="tab-pane">
                     <?php require 'settings/terms.php'; ?>
                     <input type="hidden" name="update_option" value="1" />
                     <button id="submit" class="btn btn-primary" autocomplete="off" value="Submit" name="submit" tabindex="9" type="submit"><i class="fa fa-fw fa-save"></i>&nbsp;&nbsp;<?php echo __('save'); ?></button>
@@ -79,7 +79,7 @@ require_once VIEWS_PATH . 'Layouts/admin/error_notice.php';
                     <?php require 'settings/invoice.php'; ?>
                     <input type="hidden" name="update_option" value="1" />
                     <button id="submit" class="btn btn-primary" autocomplete="off" value="Submit" name="submit" tabindex="9" type="submit"><i class="fa fa-fw fa-save"></i>&nbsp;&nbsp;<?php echo __('save'); ?></button>
-                </div>
+                </div>-->
             </div>
         </div>
     </form>
