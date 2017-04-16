@@ -63,7 +63,7 @@ function refreshExchangeRate()
         file_put_contents($exchange_rate_filename, $fc);
     }
 }
-
+date_default_timezone_set('Asia/Makassar');
 echo "Start on " . date('d-m-Y H:i:s') . "\n\n";
 refreshExchangeRate();
 echo "\nDone on " . date('d-m-Y H:i:s') . "\n";

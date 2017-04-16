@@ -12,7 +12,7 @@ class Object {
         return ($row['max'] == 'NULL') ? 1 : $row['max'] + 1;
     }
 
-    function loadFiles($type, $name) {
+    public static function loadFiles($type, $name) {
         $type = strtolower($type);
         if (!in_array($type, array('model', 'component'))) {
             return false;

@@ -115,7 +115,7 @@ function icalGetEventsDate($ical_filename_drupal)
     }
     return $result;
 }
-
+date_default_timezone_set('Asia/Makassar');
 echo "Start on " . date('d-m-Y H:i:s') . "<br/>";
 autoImportICSForBlocking();
 echo "<br/>Done on " . date('d-m-Y H:i:s') . "<br/>";
