@@ -273,6 +273,7 @@ var gz$ = jQuery.noConflict();
                 dateFormat: gz$('#modal-startdate').attr('data-format'),
                 prevText: '<i class="fa fa-chevron-left"></i>',
                 nextText: '<i class="fa fa-chevron-right"></i>',
+                minDate: dateToday,
                 beforeShowDay: function (date) {
                     var string = jQuery.datepicker.formatDate(gz$('#modal-startdate').attr('data-format'), date);
                     return [self.options.bookedDate.indexOf(string) == -1]
@@ -306,6 +307,7 @@ var gz$ = jQuery.noConflict();
                 dateFormat: gz$('#startdate').attr('data-format'),
                 prevText: '<i class="fa fa-chevron-left"></i>',
                 nextText: '<i class="fa fa-chevron-right"></i>',
+                minDate: dateToday,
                 beforeShowDay: function (date) {
                     var string = jQuery.datepicker.formatDate(gz$('#startdate').attr('data-format'), date);
                     return [self.options.bookedDate.indexOf(string) == -1]

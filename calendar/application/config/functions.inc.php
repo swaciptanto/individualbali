@@ -36,25 +36,57 @@ class Util {
         'THB' => array('name' => "Thai Baht", 'symbol' => "฿", 'ASCII' => "&#3647;"),
         'TWD' => array('name' => "Taiwan New Dollar", 'symbol' => "NT$", 'ASCII' => "NT&#36;"),
     );
-    public static $owner_tokens = array(
+    public static $owner_tokens = [
         'name' => '{Name}',
         'phone' => '{Phone}',
         'email' => '{Email}',
         'message' => '{Message}',
         'startdate' => '{DateFrom}',
         'finishdate' => '{DateTo}',
-        'total' => '{Total}',
         'url' => '{URL}',
-    );
+        'total' => '{Total}',
+        'total_with_tax' => '{TotalWithTax}',
+        'total_idr' => '{TotalIDR}',
+        'total_idr_with_tax' => '{TotalIDRWithTax}',
+        'tax' => '{Tax}',
+        'enquiry_number' => '{EnquiryNumber}',
+        'enquiry_list' => '{EnquiryList}',
+        'villa_node_id' => '{VillaID}',
+        'villa_title' => '{VillaTitle}',
+        'villa_info' => '{VillaInfo}',
+        'startdatelong' => '{DateFromLongFormat}',
+        'finishdatelong' => '{DateToLongFormat}',
+        'items_date_checkin' => '{Items-BookingDate:CheckIn}',
+        'items_price_checkin' => '{Items-BookingPrice:CheckIn}',
+        'items_date_stay' => '{Items-BookingDate:Stay}',
+        'items_price_stay' => '{Items-BookingPrice:Stay}',
+        'items_text_stay' => '{Items-Text:Stay}',
+    ];
     public static $owner_tokens_info = array(
+        '{EnquiryNumber} - Enquiry Number',
+        '{EnquiryList} - Enquiry List Table',
         '{Name} - First Name And Last Name',
         '{Phone} - Phone',
         '{Email} - Email',
         '{Message} - Message',
         '{DateFrom} - Start Date',
         '{DateTo} - End Date',
-        '{Total} - Total',
+        '{DateFromLongFormat} - Start Date (e.g. Wed 05th July 2017)',
+        '{DateFromToLongFormat} - End Date (e.g. Wed 05th July 2017)',
         '{URL} - Villa URL',
+        '{VillaID} - Villa ID',
+        '{VillaTitle} - Villa Title',
+        '{VillaInfo} - Villa Info',
+        '{Total} - Total',
+        '{TotalIDR} - Total in IDR',
+        '{TotalWithTax} - Total with tax',
+        '{TotalIDRWithTax} - Total with tax in IDR',
+        '{Tax} - Tax',
+        '{Items-BookingDate:CheckIn} - Date Check In',
+        '{Items-BookingPrice:CheckIn} - Price Check In',
+        '{Items-BookingDate:Stay} - Date Stay',
+        '{Items-BookingPrice:Stay} - Price Stay',
+        '{Items-Text:Stay} - Text Stay',
     );
     public static $tokens = array(
         'id' => '{BookingID}',
@@ -616,5 +648,32 @@ class Util {
         }
     }
 
+    /**
+     * Get ordinal suffix of a number e.g.: 1st, 2nd, 3rd
+     * @param type $num
+     * @return string
+     */
+    public static function ordinal_suffix($number){
+        $number = $number % 100; // protect against large numbers
+        if($number < 11 || $number > 13){
+             switch($number % 10){
+                case 1: return 'st';
+                case 2: return 'nd';
+                case 3: return 'rd';
+            }
+        }
+        return 'th';
+    }
+    
+    public static function printRepeatedText($printed_text, $number_repeated, $new_line = '<br/>')
+    {
+        $text = '';
+        for ($n = 1; $n <= $number_repeated; $n++) {
+            $text .= $printed_text;
+            if ($n < $number_repeated) {
+                $text .= $new_line;
+            }
+        }
+        return $text;
+    }
 }
-?>

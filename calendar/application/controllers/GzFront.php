@@ -492,16 +492,155 @@ class GzFront extends App {
         }
     }
     
+    /**
+     * Generate enquiry number
+     * @return string
+     */
+    function generateEnquiryNumber()
+    {
+        $format = date('dmyhis') + mt_rand();
+        return $format;
+    }
+    
+    /**
+     * Create enquiry order
+     * @param int $calendar_id
+     * @param array $params post data of enquiry form
+     * @return boolean
+     */
+    function createEnquiry($calendar_id, $params)
+    {
+        require CONFIG_PATH . 'exchange.rate.php';
+        
+        //get rate usd to idr
+        if (isset($exchange_rate["USDIDR"])) {
+            $rate_usd_to_idr = $exchange_rate["USDIDR"];
+        } else {
+            $rate_usd_to_idr = 0;
+        }
+        
+        $params['from_date'] = Util::dateToTimestamp(
+            $this->tpl['option_arr_values']['date_format'],
+            $params['startdate']
+        );
+        $params['to_date'] = Util::dateToTimestamp(
+            $this->tpl['option_arr_values']['date_format'],
+            $params['finishdate']
+        );
+        $params['calendar_id'] = $calendar_id;
+        
+        Object::loadFiles(
+            'Model',
+            [
+                'Calendar',
+                'Enquiry',
+                'DrupalBedroom',
+                'DrupalNodeRevision',
+                'DrupalRateTax',
+                'DrupalTaxonomyTermData',
+            ]
+        );
+        $CalendarModel = new CalendarModel();
+        $EnquiryModel = new EnquiryModel();
+        $DrupalBedroomModel = new DrupalBedroomModel();
+        $DrupalNodeRevisionModel = new DrupalNodeRevisionModel();
+        $DrupalRateTaxModel = new DrupalRateTaxModel();
+        $DrupalTaxonomyTermDataModel = new DrupalTaxonomyTermDataModel();
+        
+        $calendar = $CalendarModel->get($calendar_id);
+        
+        //get villa node id
+        $node_revision_data = $DrupalNodeRevisionModel
+            ->get($calendar['villa_node_id']);
+        //get villa info data "Bedroom"
+        $bedroom_data = $DrupalBedroomModel->get($calendar['villa_node_id']);
+        $taxonomy_data = $DrupalTaxonomyTermDataModel
+            ->get($bedroom_data['bedroom_tid']);
+        //get price total
+        $price = $this->calculateBookingPrice($params);
+        //get tax
+        $tax = $DrupalRateTaxModel
+            ->get($calendar['villa_node_id'])['field_tax_value'];
+        
+        $enquiry_data = [
+            'enquiry_number' => $this->generateEnquiryNumber(),
+            'villa_id' => $calendar['villa_node_id'],
+            'villa_name' => $node_revision_data['title'],
+            'villa_info' => $taxonomy_data['name'],
+            'customer_name' => $params['name'],
+            'customer_email' => $params['email'],
+            'customer_phone'
+            => $params['country_phone_code'] . $params['phone_number'],
+            'date_check_in'
+            => date('Y-m-d H:i:s', strtotime($params['startdate'])),
+            'date_check_out'
+            => date('Y-m-d H:i:s', strtotime($params['finishdate'])),
+            'price_total' => (float)$price['total'],
+            'tax' => $tax,
+            'rate_usd_to_idr' => $rate_usd_to_idr,
+        ];
+        $enquiry_id = $EnquiryModel->save($enquiry_data);
+        if ($enquiry_id !== false) {
+            $this->createEnquiryItems($enquiry_id, $params);
+            return $enquiry_id;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Create enquiry order items
+     * @param type $enquiry_id
+     * @param array $params post data of enquiry form and enquiry order
+     */
+    function createEnquiryItems($enquiry_id, $params)
+    {
+        Object::loadFiles(
+            'Model',
+            [
+                'Price',
+                'EnquiryItems',
+            ]
+        );
+        $PriceModel = new PriceModel();
+        $EnquiryItemsModel = new EnquiryItemsModel();
+        
+        $id = $params['calendar_id'];
+        $data_prices = $PriceModel->getPrices($params, $id);
+        if (empty($data_prices) || count($data_prices) === 0) {
+            $data_prices = $PriceModel->getDefaultPrices($params, $id);
+        }
+        foreach ($data_prices as $k => $v) {
+            for ($i = $params['from_date']; $i < $params['to_date']; $i = strtotime('+1 day', $i)) {
+                if ($i >= $v['from_date'] && $i <= $v['to_date']) {
+                    $enquiry_items_data = [
+                        'enquiry_id' => $enquiry_id,
+                        'date_booking' => date('Y-m-d', $i),
+                        'price' => (float)$v['rate'],
+                    ];
+                    $EnquiryItemsModel->save($enquiry_items_data);
+                }
+            }
+        }
+    }
+    
     function send_inquiry_form(){
         $this->isAjax = true;
-        
-        $this->sendInquiryFormEmail('client');
-        //$this->sendInquiryFormEmail('admin');
-        //modified: change to reservation email
-        //$this->sendInquiryFormEmail('owner');
-        $this->sendInquiryFormEmail('reservation');
-        
-        echo __('inquiry_form_success_result');
+        $enquiry_id = $this->createEnquiry($_GET['cid'], $_POST);
+        //$enquiry_id = 1;
+        if ($enquiry_id !== false) {
+            $this->sendInquiryFormEmail($enquiry_id, 'client');
+            //$this->sendInquiryFormEmail($enquiry_id, 'admin');
+            //modified: change to reservation email
+            //$this->sendInquiryFormEmail($enquiry_id, 'owner');
+            $this->sendInquiryFormEmail($enquiry_id, 'reservation');
+            //echo __('inquiry_form_success_result');
+            echo "Enquiry has been submitted, we will proceed and inform you"
+            . " soon!";
+        } else {
+            echo "Currently we have problem processing your enquiry, please"
+            . " retry to submit or contact our support if problems persist";
+        }
     }
 
     function calendars() {

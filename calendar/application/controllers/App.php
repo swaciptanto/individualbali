@@ -116,7 +116,7 @@ class App extends Controller {
             'formated_security' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point),
             'formated_deposit' => Util::currencyFormat($option_arr['currency'], 0, $decimal_point)
             );
-
+        
         if (empty($params['calendar_id']) || empty($params['to_date']) || empty($params['from_date'])) {
             return $result;
         }
@@ -612,17 +612,17 @@ class App extends Controller {
                 switch ($group) {
                     case 'client':
                         $message = Util::replaceToken($option_arr['client_create_email_booking'], $replacement);
-                        $subjetc = $option_arr['client_create_subject_booking'];
+                        $subject = $option_arr['client_create_subject_booking'];
                         $to = $booking_details['email'];
                         break;
                     case 'admin':
                         $message = Util::replaceToken($option_arr['admin_create_email_booking'], $replacement);
-                        $subjetc = $option_arr['admin_create_subject_booking'];
+                        $subject = $option_arr['admin_create_subject_booking'];
                         $to = $option_arr['notify_email'];
                         break;
                     case 'owner':
                         $message = Util::replaceToken($option_arr['owner_create_email_booking'], $replacement);
-                        $subjetc = $option_arr['owner_create_subject_booking'];
+                        $subject = $option_arr['owner_create_subject_booking'];
                         $to = $owner['email'];
                         break;
                 }
@@ -631,17 +631,17 @@ class App extends Controller {
                 switch ($group) {
                     case 'client':
                         $message = Util::replaceToken($option_arr['client_confirmation_email_booking'], $replacement);
-                        $subjetc = $option_arr['client_confirmation_subject_booking'];
+                        $subject = $option_arr['client_confirmation_subject_booking'];
                         $to = $booking_details['email'];
                         break;
                     case 'admin':
                         $message = Util::replaceToken($option_arr['admin_confirmation_email_booking'], $replacement);
-                        $subjetc = $option_arr['admin_confirmation_subject_booking'];
+                        $subject = $option_arr['admin_confirmation_subject_booking'];
                         $to = $option_arr['notify_email'];
                         break;
                     case 'owner':
                         $message = Util::replaceToken($option_arr['owner_confirmation_email_booking'], $replacement);
-                        $subjetc = $option_arr['owner_confirmation_subject_booking'];
+                        $subject = $option_arr['owner_confirmation_subject_booking'];
                         $to = $owner['email'];
                         break;
                 }
@@ -650,17 +650,17 @@ class App extends Controller {
                 switch ($group) {
                     case 'client':
                         $message = Util::replaceToken($option_arr['client_cancellation_email_booking'], $replacement);
-                        $subjetc = $option_arr['client_cancellation_subject_booking'];
+                        $subject = $option_arr['client_cancellation_subject_booking'];
                         $to = $booking_details['email'];
                         break;
                     case 'admin':
                         $message = Util::replaceToken($option_arr['admin_cancellation_email_booking'], $replacement);
-                        $subjetc = $option_arr['admin_cancellation_subject_booking'];
+                        $subject = $option_arr['admin_cancellation_subject_booking'];
                         $to = $option_arr['notify_email'];
                         break;
                     case 'owner':
                         $message = Util::replaceToken($option_arr['owner_cancellation_email_booking'], $replacement);
-                        $subjetc = $option_arr['owner_cancellation_subject_booking'];
+                        $subject = $option_arr['owner_cancellation_subject_booking'];
                         $to = $owner['email'];
                         break;
                 }
@@ -672,13 +672,13 @@ class App extends Controller {
         try {
             $mail = new PHPMailer(true); //New instance, with exceptions enabled
             $mail->CharSet = "UTF-8";
-//$mail->IsSendmail();  // tell the class to use Sendmail
+            //$mail->IsSendmail();  // tell the class to use Sendmail
             $mail->AddReplyTo($option_arr['notify_email'], "Admin");
             $mail->From = $option_arr['notify_email'];
             $mail->FromName = $option_arr['notify_email'];
             $to = $to;
             $mail->AddAddress($to);
-            $mail->Subject = $subjetc;
+            $mail->Subject = $subject;
             $mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
             $mail->WordWrap = 80; // set word wrap
             $mail->MsgHTML($message);
@@ -695,20 +695,47 @@ class App extends Controller {
         }
     }
     
-    function sendInquiryFormEmail($group){
+    function sendInquiryFormEmail($enquiry_id, $group){
         //modified: add new model
-        Object::loadFiles('Model', array('Option', 'User', 'Calendar'));
-        $OptionModel = new OptionModel();
+        Object::loadFiles(
+            'Model',
+            [
+                'Option',
+                'User',
+                'Calendar',
+                'Enquiry',
+                'EnquiryItems',
+            ]
+        );
         $CalendarModel = new CalendarModel();
+        $EnquiryModel = new EnquiryModel();
+        $EnquiryItemsModel = new EnquiryItemsModel();
+        $OptionModel = new OptionModel();
         $UserModel = new UserModel();
         $ibh_email_reservation = 'reservation@individualbali.com';
         $ibh_email_info = 'info@individualbali.com';
         $ibh_email_info_password = 'Great1ndividual';
 
         $calendar = $CalendarModel->get($_GET['cid']);
+        $option_arr = $OptionModel
+            ->getAllPairValues(array('calendar_id' => $calendar['id']));
         $owner = $UserModel->get($calendar['user_id']);
-
-        $option_arr = $OptionModel->getAllPairValues(array('calendar_id' => $calendar['id']));
+        
+        $enquiry = $EnquiryModel->get($enquiry_id);
+        $enquiry_items = $EnquiryItemsModel->getAll(
+            ['enquiry_id' => $enquiry_id],
+            'id'
+        );
+        $items_date_checkin = date('d M Y', strtotime($enquiry_items[0]['date_booking']));
+        $items_price_checkin = Util::currencyConverter('USD', 'IDR', $enquiry_items[0]['price']);
+        $total_enquiry_items = count($enquiry_items);
+        $start_date_long = date("D dS F Y", strtotime($_POST['startdate']));
+        $finish_date_long = date("D dS F Y", strtotime($_POST['finishdate']));
+        $price_total = $enquiry['price_total'];
+        $price_total_with_tax = $enquiry['price_total'] * (1 + $enquiry['tax']);
+        $price_total_idr = Util::currencyConverter('USD', 'IDR', $price_total);
+        $price_total_idr_with_tax = Util::currencyConverter('USD', 'IDR', $price_total_with_tax);
+        $tax_idr = $price_total_idr * $enquiry['tax'] / 100;
 
         $replacement = array();
         $replacement['startdate'] = $_POST['startdate'];
@@ -718,6 +745,58 @@ class App extends Controller {
         $replacement['email'] = $_POST['email'];
         $replacement['name'] = $_POST['name'];
         $replacement['url'] = $calendar['url'];
+        
+        //draw items after check-in "stay", date and price
+        $text_items_stay_date = '';
+        $text_items_stay_price = '';
+        foreach ($enquiry_items as $enquiry_item) {
+            $n++;
+            if ($n === 1) {
+                continue;
+            }
+            $text_items_stay_date .= date(
+                'd M Y',
+                strtotime($enquiry_item['date_booking'])
+            );
+            $text_items_stay_price .= 'IDR ' . Util::formatMoney(
+                Util::currencyConverter(
+                    'USD',
+                    'IDR',
+                    $enquiry_item['price']
+                ),
+                'IDR'
+            );
+            if ($n < $total_enquiry_items) {
+                $text_items_stay_date .= '<br/>';
+                $text_items_stay_price .= '<br/>';
+            }
+        }
+        
+        $replacement = [
+            'startdate' => $_POST['startdate'],
+            'finishdate' => $_POST['finishdate'],
+            'startdatelong' => $start_date_long,
+            'finishdatelong' => $finish_date_long,
+            'phone' => $_POST['country_phone_code'] . $_POST['phone_number'],
+            'message' => $_POST['message'],
+            'email' => $_POST['email'],
+            'name' => $_POST['name'],
+            'url' => $calendar['url'],
+            'enquiry_number' => $enquiry['enquiry_number'],
+            'villa_node_id' => $enquiry['villa_id'],
+            'villa_title' => $enquiry['villa_name'],
+            'villa_info' => $enquiry['villa_info'],
+            'total' => 'IDR ' . Util::formatMoney($price_total, 'IDR'),
+            'total_with_tax' => 'IDR ' . Util::formatMoney($price_total_with_tax, 'IDR'),
+            'total_idr' => 'IDR ' . Util::formatMoney($price_total_idr, 'IDR'),
+            'total_idr_with_tax' => 'IDR ' . Util::formatMoney($price_total_idr_with_tax, 'IDR'),
+            'tax' => 'IDR ' . Util::formatMoney($tax_idr, 'IDR'),
+            'items_date_checkin' => $items_date_checkin,
+            'items_price_checkin' => 'IDR ' . Util::formatMoney($items_price_checkin, 'IDR'),
+            'items_date_stay' => $text_items_stay_date,
+            'items_price_stay' => $text_items_stay_price,
+            'items_text_stay' => Util::printRepeatedText('Stay', $total_enquiry_items - 1),
+        ];
         
         $_POST['from_date'] = Util::dateToTimestamp($this->tpl['option_arr_values']['date_format'], $_POST['startdate']);
         $_POST['to_date'] = Util::dateToTimestamp($this->tpl['option_arr_values']['date_format'], $_POST['finishdate']);
@@ -729,27 +808,28 @@ class App extends Controller {
         switch ($group) {
             case 'client':
                 $message = Util::replaceInquiryFormToken($option_arr['client_inquiry_form'], $replacement);
-                $subjetc = $option_arr['client_inquiry_form_subject'];
+                $subject = Util::replaceInquiryFormToken($option_arr['client_inquiry_form_subject'], $replacement);
                 $to = $_POST['email'];
                 break;
             case 'admin':
                 $message = Util::replaceInquiryFormToken($option_arr['admin_inquiry_form'], $replacement);
-                $subjetc = $option_arr['admin_inquiry_form_subject'];
+                $subject = Util::replaceInquiryFormToken($option_arr['admin_inquiry_form_subject'], $replacement);
                 $to = $option_arr['notify_email'];
                 break;
             case 'owner':
                 $message = Util::replaceInquiryFormToken($option_arr['owner_inquiry_form'], $replacement);
-                $subjetc = $option_arr['owner_inquiry_form_subject'];
+                $subject = Util::replaceInquiryFormToken($option_arr['owner_inquiry_form_subject'], $replacement);
                 $to = $owner['email'];
                 break;
             //modified: add new
             case 'reservation':
                 $message = Util::replaceInquiryFormToken($option_arr['owner_inquiry_form'], $replacement);
-                $subjetc = $option_arr['owner_inquiry_form_subject'];
+                $subject = Util::replaceInquiryFormToken($option_arr['owner_inquiry_form_subject'], $replacement);
                 //$to = $calendar['villa_reservation_email'];
                 $to = $ibh_email_reservation;
                 break;
         }
+        //echo "<pre>";var_dump($message);die();
         
         $option_arr['notify_email'] = $ibh_email_info;
         require_once APP_PATH . '/helpers/PHPMailer_5.2.4/class.phpmailer.php';
@@ -769,7 +849,7 @@ class App extends Controller {
             $mail->From = $option_arr['notify_email'];
             $mail->FromName = $option_arr['notify_email'];
             $mail->AddAddress($to);
-            $mail->Subject = $subjetc;
+            $mail->Subject = $subject;
             $mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
             $mail->WordWrap = 80; // set word wrap
             $mail->MsgHTML($message);
@@ -1012,17 +1092,17 @@ class App extends Controller {
         switch ($group) {
             case 'client':
                 $message = Util::replaceInquiryFormToken($option_arr['client_inquiry_form'], $replacement);
-                $subjetc = $option_arr['client_inquiry_form_subject'];
+                $subject = $option_arr['client_inquiry_form_subject'];
                 $to = $_POST['email'];
                 break;
             case 'admin':
                 $message = Util::replaceInquiryFormToken($option_arr['admin_inquiry_form'], $replacement);
-                $subjetc = $option_arr['admin_inquiry_form_subject'];
+                $subject = $option_arr['admin_inquiry_form_subject'];
                 $to = $option_arr['notify_email'];
                 break;
             case 'owner':
                 $message = Util::replaceInquiryFormToken($option_arr['owner_inquiry_form'], $replacement);
-                $subjetc = $option_arr['owner_inquiry_form_subject'];
+                $subject = $option_arr['owner_inquiry_form_subject'];
                 $to = $owner['email'];
                 break;
             //modified: add new
@@ -1031,7 +1111,7 @@ class App extends Controller {
                 $email_reservation_data = $DrupalEmailReservation->get($calendar['villa_node_id']);
                 echo "<pre>";var_dump($email_reservation_data['field_email_reservasi_value']);
                 $message = Util::replaceInquiryFormToken($option_arr['owner_inquiry_form'], $replacement);
-                $subjetc = $option_arr['owner_inquiry_form_subject'];
+                $subject = $option_arr['owner_inquiry_form_subject'];
                 $to = $calendar['villa_reservation_email'];
                 break;
         }
