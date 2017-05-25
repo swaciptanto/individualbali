@@ -7,7 +7,7 @@ $_REQUEST['action'] = "rate_display";
 
 ob_start();
 
-require_once INSTALL_PATH . '/load.php';
+require_once INSTALL_PATH . 'load.php';
 
 $content = ob_get_contents();
 ob_end_clean();

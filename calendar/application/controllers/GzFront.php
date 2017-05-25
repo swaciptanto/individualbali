@@ -81,8 +81,10 @@ class GzFront extends App {
                 $this->css[] = array('file' => 'gzadmin/plugins/tooltipster/css/themes/tooltipster-light.css', 'path' => JS_PATH);
                 $this->css[] = array('file' => 'gzadmin/plugins/lada/prism.css', 'path' => JS_PATH);
             }
-            foreach ($_GET['cid'] as $cid) {
-                $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
+            if (isset($_GET['cid']) && is_array($_GET['cid'])) {
+                foreach ($_GET['cid'] as $cid) {
+                    $this->css[] = array('file' => 'index.php?controller=GzFront&action=GzABCCss&cid=' . $cid, 'path' => '');
+                }
             }
             //load js
             $this->js[] = array('file' => 'jquery-2.0.2.min.js', 'path' => LIBS_PATH);

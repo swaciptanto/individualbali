@@ -1,5 +1,7 @@
 <?php
 
+ini_set('memory_limit','256M');
+
 class Bootstrap {
 
     protected $_url;
@@ -45,9 +47,8 @@ class Bootstrap {
         $this->controller->beforeFilter();
 
         $this->_callControllerMethod();
-       
+ 
         if ($this->controller->isAjax()) {
-
             if (is_file($content_tpl)) {
                 require $content_tpl;
             }

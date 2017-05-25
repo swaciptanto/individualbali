@@ -50,7 +50,7 @@ if (!$stop) {
 }
 
 if (!defined("INSTALL_PATH")) {
-    define("INSTALL_PATH", "D:/Development/individualbali/calendar/");
+    define("INSTALL_PATH", "D:/Development/individualbali_git/calendar/");
 }
 if (!defined("INSTALL_URL")) {
     define("INSTALL_URL", "http://individualbali.com.dev/calendar/");
